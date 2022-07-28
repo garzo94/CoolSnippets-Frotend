@@ -1,0 +1,16 @@
+.w-tc-editor.grabber::-webkit-resizer {
+    background: rgb(255, 255, 255);
+    overflow: hidden;
+
+  }
+
+  .w-tc-editor{
+    border: 4px solid rgba(255,255,255,0.0);
+  }
+
+  .w-tc-editor.grabber{
+  border:  4px solid white
+  }
+
+
+

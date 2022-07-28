@@ -7,22 +7,25 @@ import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 export const theme = createTheme({
     palette: {
       mode: 'light',
+      action:{
+        disabled: 'rgba(33, 235, 255, 0.5)'
+      },
       primary:{
         main:'#21ebff',
-        
-  
+
+
       },
       secondary:{
         main:"#19334d",
-        
+
       },
 
       tertiary:{
         main:'#290066'
       }
-  
+
     },
-    
+
   })
 
   export const ButtonCustomized = styled(Button)(({theme})=>({
@@ -36,8 +39,8 @@ export const theme = createTheme({
     backgroundColor: 'rgba(33, 235, 255, 0.2)',
     WebkitBoxReflect: 'below 1px linear-gradient(transparent,#0003)',
 
-    
-   
+
+
     '&:hover':{
       background: '#21ebff',
       color: '#111',
@@ -50,18 +53,18 @@ export const theme = createTheme({
       top: 0,
       left: 0,
       width: '15px',
-      height: '15px', 
+      height: '15px',
       borderTop: '2px solid #21ebff',
       borderLeft: '2px solid #21ebff',
       transition: '0.5s',
       transitionDelay: '0s'
-     
+
     },
 
     '&:hover:before':{
       width: '100%',
       height: '100%',
-     
+
     },
     '&:after':{
       content: '""',
@@ -69,17 +72,17 @@ export const theme = createTheme({
       bottom: 0,
       right: 0,
       width: '15px',
-      height: '15px', 
+      height: '15px',
       borderBottom: '2px solid #21ebff',
       borderRight: '2px solid #21ebff',
       transition: '0.5s',
       transitionDelay: '0s',
-      
+
     },
     '&:hover:after':{
       width: '100%',
       height: '100%',
-     
+
     },
 
   }))
@@ -103,10 +106,28 @@ export const theme = createTheme({
       // }
     },
     '& .MuiSvgIcon-root':{ color: theme.palette.primary.main},
-    
-   
+
+
 
   }))
+
+  export const SelectCustomizedLanguage = styled(Select)(({theme})=>({
+    "&.MuiOutlinedInput-root": {
+      "& .MuiSelect-select": {
+        color: theme.palette.secondary.main
+      },
+      // "&:hover fieldset": {
+      //   borderColor: "transparent"
+      // },
+      // "&.Mui-focused fieldset": {
+      //   borderColor: "transparent"
+      // }
+    },
+    '& .MuiSvgIcon-root':{ color: theme.palette.secondary.main},
+    '& .MuiOutlinedInput-notchedOutline':{borderColor: theme.palette.secondary.main},
+    // "& .MuiSelect-select:focus"
+  }));
+
 
   export const TooltipCustomized = styled(({ className, ...props }) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -118,7 +139,7 @@ export const theme = createTheme({
       fontSize: 11,
     },
   }));
-  
-  
 
- 
+
+
+

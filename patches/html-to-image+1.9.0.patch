@@ -1,0 +1,13 @@
+diff --git a/node_modules/html-to-image/lib/embedWebFonts.js b/node_modules/html-to-image/lib/embedWebFonts.js
+index b1e4b44..1495a33 100644
+--- a/node_modules/html-to-image/lib/embedWebFonts.js
++++ b/node_modules/html-to-image/lib/embedWebFonts.js
+@@ -3,7 +3,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
+     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+     return new (P || (P = Promise))(function (resolve, reject) {
+         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
++        function rejected(value) {if (sheet.hasOwnProperty('cssRules')) try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+         step((generator = generator.apply(thisArg, _arguments || [])).next());
+     });

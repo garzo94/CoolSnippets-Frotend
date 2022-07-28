@@ -4,6 +4,7 @@ import RightBar from './RightBar'
 import Main from './Main'
 import {Box} from '@mui/material'
 
+
 export default function CreateNote() {
   return (
     <Box sx={{display:'flex'}}>
