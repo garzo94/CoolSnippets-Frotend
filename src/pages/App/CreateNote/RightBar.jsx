@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { theme } from "../../../styles/createTheme";
 import {
   FormControl,
@@ -24,22 +24,73 @@ import { SelectCustomized } from "../../../styles/createTheme";
 import TextField from "@mui/material/TextField";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import { ButtonCustomized } from "../../../styles/createTheme";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import useRequestResource from "../../hooks/useRequestResource";
 
 export default function RightBar() {
+  const {
+    resource,
+    getResource,
+    languages,
+    nested,
+    subtopics,
+    getProgramingLanguages,
+    getLanguageTopicSubTopic,
+    getSubTopics,
+    addLanguage,
+  } = useRequestResource({});
+
   const [proLanguage, setProLanguage] = useState(null);
   const [topic, setTopic] = useState(null);
   const [subTopic, setSubTopic] = useState(null);
   const [description, setDescription] = useState(null);
   const [dynamicText, setdynamicText] = useState(null);
+  const [programingLanguage, setprogramingLanguage] = useState();
+  const [languageAdded, setLanguageAdded] = useState("");
+  const [add, setAdd] = useState(null);
+  const { id } = useParams();
   function handleChange(event) {
-    console.log(event.target.value);
+    switch (event.target.name) {
+      case "language":
+        return setProLanguage(event.target.value);
+      case "topic":
+        return setTopic(event.target.value);
+      case "subtopic":
+        return setSubTopic(event.target.value);
+    }
   }
+  useEffect(() => {
+    if (id) {
+      getResource(id);
+      getProgramingLanguages();
+      getLanguageTopicSubTopic();
+    }
+  }, [id, add]);
+
+  useEffect(() => {
+    if (resource !== null) {
+      var lan = resource.language;
+      var top = resource.topic;
+      getSubTopics({ query: `${lan.id}/${top.id}/` });
+      setprogramingLanguage(lan.id);
+      setDescription(resource.description);
+    }
+  }, [resource]);
+
   function handleTextFieldText(event) {
-    console.log(event.target.value, "textfieldValue");
+    setLanguageAdded(event.target.value);
+    console.log(event.target.value, "language Added");
   }
   function handleDescription(event) {
-    console.log(event.target.value, "Description");
+    setDescription(event.target.value);
+  }
+  function handleAdd() {
+    if (dynamicText === "language") {
+      addLanguage({ name: languageAdded });
+      getProgramingLanguages();
+      setAdd([languageAdded]);
+      handleOpen();
+    }
   }
   // Delete Dialog Alert
   const Transition = React.forwardRef(function Transition(props, ref) {
@@ -99,6 +150,7 @@ export default function RightBar() {
           variant="filled"
           color="secondary"
           focused
+          value={languageAdded}
           onChange={handleTextFieldText}
           sx={{
             width: "80%",
@@ -120,6 +172,7 @@ export default function RightBar() {
           <Button
             color="secondary"
             sx={{ m: 3, backgroundColor: "rgba(25, 51, 77,0.1)" }}
+            onClick={handleAdd}
           >
             Add
           </Button>
@@ -128,27 +181,27 @@ export default function RightBar() {
     </Modal>
   );
   // Alert Dialog Format
-  const alertDelete = (
-    <Dialog
-      open={open}
-      TransitionComponent={Transition}
-      keepMounted
-      onClose={handleCloseAlert}
-      aria-describedby="alert-dialog-slide"
-    >
-      <DialogTitle>{"Are you sure you want to delete this?"}</DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-slide-description">
-          If you delete this, all notes related to this programming language
-          will be deleted too.
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleCloseAlert}>Yes, delete it!</Button>
-        <Button onClick={handleCloseAlert}>No!</Button>
-      </DialogActions>
-    </Dialog>
-  );
+  // const alertDelete = (
+  //   <Dialog
+  //     open={open}
+  //     TransitionComponent={Transition}
+  //     keepMounted
+  //     onClose={handleCloseAlert}
+  //     aria-describedby="alert-dialog-slide"
+  //   >
+  //     <DialogTitle>{"Are you sure you want to delete this?"}</DialogTitle>
+  //     <DialogContent>
+  //       <DialogContentText id="alert-dialog-slide-description">
+  //         If you delete this, all notes related to this programming language
+  //         will be deleted too.
+  //       </DialogContentText>
+  //     </DialogContent>
+  //     <DialogActions>
+  //       <Button onClick={handleCloseAlert}>Yes, delete it!</Button>
+  //       <Button onClick={handleCloseAlert}>No!</Button>
+  //     </DialogActions>
+  //   </Dialog>
+  // );
 
   return (
     <ThemeProvider theme={theme}>
@@ -210,22 +263,17 @@ export default function RightBar() {
                 sx={{ boxShadow: "0 0 5px #21ebff, 0 0 2px #290066" }}
                 color={theme.secondary}
               >
-                {alertDelete}
-                <MenuItem value="Python">
-                  Python
-                  <Tooltip title="Delete">
-                    <IconButton
-                      color="secondary"
-                      size="small"
-                      sx={{ ml: 6 }}
-                      onClick={handleClickOpen}
+                {languages.results.map((l) => {
+                  return (
+                    <MenuItem
+                      key={l.id}
+                      value={l.id}
+                      onClick={() => handleMenuItem(l.name)}
                     >
-                      <DeleteForeverIcon />
-                    </IconButton>
-                  </Tooltip>
-                </MenuItem>
-                <MenuItem value="Javascript">Javascript</MenuItem>
-                <MenuItem value="SQL">SQL</MenuItem>
+                      {l.name}
+                    </MenuItem>
+                  );
+                })}
               </SelectCustomized>
             </FormControl>
             <Tooltip title="Add a new programing language">
@@ -265,15 +313,23 @@ export default function RightBar() {
                 id="topic"
                 value={topic ?? ""}
                 onChange={handleChange}
-                name="toppic"
+                name="topic"
                 variant="outlined"
                 sx={{ boxShadow: "0 0 5px #21ebff, 0 0 2px #290066" }}
                 color={theme.secondary}
                 size="small"
               >
-                <MenuItem value="Python">Python</MenuItem>
-                <MenuItem value="Javascript">Javascript</MenuItem>
-                <MenuItem value="SQL">SQL</MenuItem>
+                {nested.results.map((n) => {
+                  return n.id === programingLanguage
+                    ? n.topic.map((t) => {
+                        return (
+                          <MenuItem value={t.id} key={t.id}>
+                            {t.name}
+                          </MenuItem>
+                        );
+                      })
+                    : null;
+                })}
               </SelectCustomized>
             </FormControl>
             <Tooltip title="Add a new Topic">
@@ -319,9 +375,13 @@ export default function RightBar() {
                 color={theme.secondary}
                 size="small"
               >
-                <MenuItem value="Python">Python</MenuItem>
-                <MenuItem value="Javascript">Javascript</MenuItem>
-                <MenuItem value="SQL">SQL</MenuItem>
+                {subtopics.results.map((sub) => {
+                  return (
+                    <MenuItem value={sub.id} option={sub.name} key={sub.id}>
+                      {sub.name}
+                    </MenuItem>
+                  );
+                })}
               </SelectCustomized>
             </FormControl>
             <Tooltip title="Add a new Sub-topic">
@@ -340,6 +400,7 @@ export default function RightBar() {
             label="Add a short description"
             variant="standard"
             onChange={handleDescription}
+            value={description ?? ""}
             sx={{
               width: "90%",
               mt: 3,
@@ -347,7 +408,10 @@ export default function RightBar() {
               "& label": { color: "primary.main" },
               "& input": { borderBottom: "1px solid #21ebff" },
             }}
-            inputProps={{ sx: { color: "rgba(33, 235, 255, 0.8)" } }}
+            inputProps={{
+              sx: { color: "rgba(33, 235, 255, 0.8)" },
+              maxLength: 50,
+            }}
           />
 
           <ButtonCustomized
@@ -356,7 +420,7 @@ export default function RightBar() {
             sx={{ mt: 8, borderRadius: "10px" }}
             to="/create-note"
           >
-            Save
+            {id ? "Edit" : "Save"}
           </ButtonCustomized>
         </Box>
       </Paper>

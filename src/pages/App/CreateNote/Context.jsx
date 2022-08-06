@@ -27,13 +27,31 @@ export function Provider({ children }) {
     });
   };
 
+  const changeQuery = (value) => {
+    dispatch({
+      type: "CHANGE_QUERY",
+      payload: value,
+    });
+  };
+
+  const changeLanguage = (value) => {
+    dispatch({
+      type: "CHANGE_LANGUAGE",
+      payload: value,
+    });
+  };
+
   const value = {
     addText: state.addText,
     addTitle: state.addTitle,
     changeBack: state.background,
+    query: state.query,
+    programingLang: state.programingLang,
+    changeLanguage,
     addTitleFunc,
     addTextFunc,
     changeBackground,
+    changeQuery,
   };
 
   return <Context.Provider value={value}>{children}</Context.Provider>;

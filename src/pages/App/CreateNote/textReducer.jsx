@@ -2,9 +2,9 @@ export const initialState = {
   addText: false,
   addTitle: false,
   background: 0,
+  query: "all",
+  programingLang: "",
 };
-
-import React from "react";
 
 export default function textReducer(state, action) {
   const { type, payload } = action;
@@ -23,6 +23,16 @@ export default function textReducer(state, action) {
       return {
         ...state,
         background: payload,
+      };
+    case "CHANGE_QUERY":
+      return {
+        ...state,
+        query: payload,
+      };
+    case "CHANGE_LANGUAGE":
+      return {
+        ...state,
+        programingLang: payload,
       };
     default:
       state;

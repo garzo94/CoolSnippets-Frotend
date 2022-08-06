@@ -37,6 +37,10 @@ const App = () => {
                     <Route element={<BaseLayout />}>
                       <Route path="/" element={<Dashboard />} />
                       <Route path="/create-note" element={<CreateNote />} />
+                      <Route
+                        path="/create-note/edit/:id"
+                        element={<CreateNote />}
+                      />
                     </Route>
                   </Route>
 

@@ -4,22 +4,22 @@ import AppHeader from "./AppHeader";
 import { Box } from "@mui/system";
 import { Outlet } from "react-router-dom";
 
-
+import LoadingOverlayResource from "../../pages/components/loadingOverlayResource";
 
 function BaseLayout() {
-    
+
 
     return (
         <Box sx={{ display: "flex" }}>
-            <AppHeader/>
-            
+           <AppHeader/>
 
-           
+
+           <LoadingOverlayResource>
                 <Box
                     sx={{
                         flexGrow: 1,
                         minHeight: '100vh',
-                        padding: 3,                                           
+                        padding: 3,
                     }}
                 >
                     <Toolbar />
@@ -27,7 +27,8 @@ function BaseLayout() {
                         <Outlet />
                     </Box>
                 </Box>
-            
+            </LoadingOverlayResource>
+
         </Box>
     );
 }

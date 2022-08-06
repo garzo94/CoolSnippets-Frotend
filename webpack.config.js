@@ -23,8 +23,8 @@ module.exports = {
         port,
         historyApiFallback: true,
         proxy: {
-          '/api': 'http://localhost:8000/', 
-          pathRewrite: { '^/api': '' }
+          context: ['/media', '/api'],
+          target: 'http://localhost:8000/'
         },
     },
     devtool: 'eval-source-map',

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
@@ -13,36 +13,80 @@ import Draggable from "react-draggable";
 import useText from "./Context";
 import { dataBackground } from "./backgroundData";
 import exportAsImage from "./exportAsImage";
+import useRequestResource from "../../hooks/useRequestResource";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function Main() {
   const exportRef = useRef();
-  // const domEl = useRef(null);
-  // const downloadImage = async () => {
-  //   const dataUrl = await htmlToImage.toPng(domEl.current);
+  const { id } = useParams();
+  const { resource, getResource } = useRequestResource({});
+  const [textChange, setTextChange] = useState("Write your text here!");
+  const [titleChange, setTitleChange] = useState("Write your title here!");
 
-  //   // download image
-  //   const link = document.createElement("a");
-  //   link.download = "MySnipped.png";
-  //   link.href = dataUrl;
-  //   link.click();
-  // };
-  const [background, setBackground] = useState(0);
-  const { addText, addTitle, addTextFunc, addTitleFunc, changeBack } =
-    useText();
+  const {
+    addText,
+    addTitle,
+    addTextFunc,
+    addTitleFunc,
+    changeBack,
+    changeBackground,
+  } = useText();
+
+  useEffect(() => {
+    if (id) {
+      getResource(id);
+    }
+  }, [id]);
+
   const nodeRef = React.useRef(null);
-  const [position, setposition] = useState({
-    valueX: -250,
+  const [Titleposition, setTitleposition] = useState({
+    valueX: -200,
     valueY: -140,
   });
+  const [Textposition, setTextposition] = useState({
+    valueX: -250,
+    valueY: -100,
+  });
 
-  const eventLogger = (e, data) => {
-    setposition({ valueX: data.x, valueY: data.y });
+  const eventLoggerTitle = (e, data) => {
+    setTitleposition({ valueX: data.x, valueY: data.y });
   };
+  const eventLoggerText = (e, data) => {
+    setTextposition({ valueX: data.x, valueY: data.y });
+  };
+  const [title, setTitle] = useState();
+  const [text, setText] = useState();
   const [code, setCode] = useState(null);
   const [click, setClick] = useState(false);
   const [selectValue, setSelectValue] = useState(null);
+
+  useEffect(() => {
+    if (resource) {
+      if (resource.text !== "") {
+        addTextFunc();
+        setText(resource.text);
+      }
+      if (resource.title !== "") {
+        addTitleFunc();
+        setTitle(resource.title);
+      }
+      if (resource.background) {
+        changeBackground(resource.background);
+      }
+      if (resource.language) {
+        var mylanguage = resource.language;
+        setSelectValue(mylanguage.name);
+      }
+      if (resource.text) {
+        setTextChange(resource.text);
+      }
+      if (resource.title) {
+        setTitleChange(resource.title);
+      }
+    }
+  }, [resource]);
+
   function handleKey(e) {
-    console.log(e.target.className);
     if (String(e.target.className).includes("title") && e.key === "Delete") {
       addTitleFunc();
     }
@@ -50,8 +94,11 @@ export default function Main() {
       addTextFunc();
     }
   }
+  function handleChangeTitle(e) {
+    setTitle(e.target.textContent);
+  }
   function handleChangeText(e) {
-    // console.log(e.currentTarget.textContent);
+    setText(e.target.textContent);
   }
   function handleClick() {
     setClick(true);
@@ -62,6 +109,7 @@ export default function Main() {
   function handleSelect(e) {
     setSelectValue(e.target.value);
   }
+
   return (
     <div>
       <Box>
@@ -85,6 +133,7 @@ export default function Main() {
             id="planguage"
             label="Language"
             value={selectValue ?? ""}
+            defaultValue="choose"
             onChange={handleSelect}
             variant="standard"
             color="secondary"
@@ -120,16 +169,19 @@ export default function Main() {
         >
           {addText ? (
             <Draggable
-              defaultPosition={{ x: position.valueX, y: position.valueY }}
+              defaultPosition={{
+                x: Textposition.valueX,
+                y: Textposition.valueY,
+              }}
               bounds="parent"
-              onStop={eventLogger}
+              onStop={eventLoggerText}
               nodeRef={nodeRef}
             >
               <div
-                contentEditable="true"
                 ref={nodeRef}
                 suppressContentEditableWarning={true}
-                onInput={handleChangeText}
+                contentEditable="true"
+                onInput={(e) => handleChangeText(e)}
                 onKeyDown={(e) => handleKey(e)}
                 className="text"
                 style={{ cursor: "grab", color: "#fff", position: "absolute" }}
@@ -140,7 +192,7 @@ export default function Main() {
                     fontSize: "1.5rem",
                   }}
                 >
-                  Write your text here!
+                  {textChange}
                 </Typography>
               </div>
             </Draggable>
@@ -148,16 +200,19 @@ export default function Main() {
 
           {addTitle ? (
             <Draggable
-              defaultPosition={{ x: position.valueX, y: position.valueY }}
+              defaultPosition={{
+                x: Titleposition.valueX,
+                y: Titleposition.valueY,
+              }}
               bounds="parent"
-              onStop={eventLogger}
+              onStop={eventLoggerTitle}
               nodeRef={nodeRef}
             >
               <h3
                 contentEditable="true"
                 ref={nodeRef}
                 suppressContentEditableWarning={true}
-                onInput={handleChangeText}
+                onInput={(e) => handleChangeTitle(e)}
                 onKeyDown={(e) => handleKey(e)}
                 className="title"
                 style={{
@@ -169,7 +224,7 @@ export default function Main() {
                   fontSize: "2rem",
                 }}
               >
-                Write your title here!
+                {titleChange}
               </h3>
             </Draggable>
           ) : null}
@@ -212,7 +267,7 @@ export default function Main() {
           borderRadius: "10px",
         }}
         startIcon={<DownloadIcon />}
-        onClick={() => exportAsImage(exportRef.current, "test")}
+        onClick={() => exportAsImage(exportRef.current, "mySnniped")}
       >
         Download
       </Button>
