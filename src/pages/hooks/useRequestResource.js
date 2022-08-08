@@ -27,7 +27,7 @@ export default function useRequestResource({endpoint, resourceLabel}) {
         const formattedError = formatHttpApiError(err);
         seterror(formattedError)
         setLoading(false)
-        enqueueSnackbar(formattedError)
+        enqueueSnackbar(formattedError,'error')
     }, [enqueueSnackbar, seterror, setLoading])
     // ################################
 
@@ -138,15 +138,38 @@ export default function useRequestResource({endpoint, resourceLabel}) {
 
 // Add language
   const addLanguage = useCallback((values,) => {
-    console.log(values,'mi vlues chingadadmare')
+
     setLoading(true)
     axios.post(`/api/language/`,values,getCommonOptions())
         .then(() => {
             setLoading(false)
-            enqueueSnackbar(`Programing Language added`)
+            enqueueSnackbar(`No languages yet!`)
 
 
         }).catch(handleRequestResourceError)
+}, [ enqueueSnackbar, , handleRequestResourceError, setLoading])
+//#######
+// Add Topic
+const addTopic = useCallback((values,{id}) => {
+
+  setLoading(true)
+  axios.post(`/api/topic/${id}/`,values,getCommonOptions())
+      .then(() => {
+          setLoading(false)
+          enqueueSnackbar(`Topic added`)
+
+      }).catch(handleRequestResourceError)
+}, [ enqueueSnackbar, , handleRequestResourceError, setLoading])
+//#######
+const addSubTopic = useCallback((values,{idLang},{idTop}) => {
+
+  setLoading(true)
+  axios.post(`/api/subtopic/${idLang}/${idTop}/`,values,getCommonOptions())
+      .then(() => {
+          setLoading(false)
+          enqueueSnackbar(`Topic added`)
+
+      }).catch(handleRequestResourceError)
 }, [ enqueueSnackbar, , handleRequestResourceError, setLoading])
 //#######
   return {
@@ -157,6 +180,8 @@ export default function useRequestResource({endpoint, resourceLabel}) {
     getSubTopics,
     getResource,
     addLanguage,
+    addTopic,
+    addSubTopic,
     resource,
     languages,
     nested,

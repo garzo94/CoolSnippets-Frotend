@@ -38,6 +38,8 @@ export default function RightBar() {
     getLanguageTopicSubTopic,
     getSubTopics,
     addLanguage,
+    addTopic,
+    addSubTopic,
   } = useRequestResource({});
 
   const [proLanguage, setProLanguage] = useState(null);
@@ -45,8 +47,9 @@ export default function RightBar() {
   const [subTopic, setSubTopic] = useState(null);
   const [description, setDescription] = useState(null);
   const [dynamicText, setdynamicText] = useState(null);
-  const [programingLanguage, setprogramingLanguage] = useState();
   const [languageAdded, setLanguageAdded] = useState("");
+  const [topicAdded, setTopicAdded] = useState("");
+  const [subtopicAdded, setSubTopicAdded] = useState("");
   const [add, setAdd] = useState(null);
   const { id } = useParams();
   function handleChange(event) {
@@ -59,6 +62,7 @@ export default function RightBar() {
         return setSubTopic(event.target.value);
     }
   }
+
   useEffect(() => {
     if (id) {
       getResource(id);
@@ -71,15 +75,26 @@ export default function RightBar() {
     if (resource !== null) {
       var lan = resource.language;
       var top = resource.topic;
-      getSubTopics({ query: `${lan.id}/${top.id}/` });
-      setprogramingLanguage(lan.id);
+      getSubTopics({
+        query: `${proLanguage ? proLanguage : lan.id}/${
+          topic ? topic : top.id
+        }/`,
+      });
+
       setDescription(resource.description);
     }
-  }, [resource]);
+  }, [resource, topic]);
 
   function handleTextFieldText(event) {
-    setLanguageAdded(event.target.value);
-    console.log(event.target.value, "language Added");
+    if (dynamicText === "language") {
+      setLanguageAdded(event.target.value);
+    }
+    if (dynamicText === "topic") {
+      setTopicAdded(event.target.value);
+    }
+    if (dynamicText === "subtopic") {
+      setSubTopicAdded(event.target.value);
+    }
   }
   function handleDescription(event) {
     setDescription(event.target.value);
@@ -89,6 +104,20 @@ export default function RightBar() {
       addLanguage({ name: languageAdded });
       getProgramingLanguages();
       setAdd([languageAdded]);
+      handleOpen();
+    }
+    if (dynamicText === "topic") {
+      addTopic({ name: topicAdded }, { id: proLanguage });
+      setAdd([languageAdded, topicAdded]);
+      handleOpen();
+    }
+    if (dynamicText === "subtopic") {
+      addSubTopic(
+        { name: subtopicAdded },
+        { idLang: proLanguage },
+        { idTop: topic }
+      );
+      setAdd([subtopicAdded]);
       handleOpen();
     }
   }
@@ -150,7 +179,7 @@ export default function RightBar() {
           variant="filled"
           color="secondary"
           focused
-          value={languageAdded}
+          // value={languageAdded}
           onChange={handleTextFieldText}
           sx={{
             width: "80%",
@@ -260,20 +289,27 @@ export default function RightBar() {
                 name="language"
                 variant="outlined"
                 size="small"
-                sx={{ boxShadow: "0 0 5px #21ebff, 0 0 2px #290066" }}
+                sx={{
+                  boxShadow: "0 0 10px #21ebff, 0 0 5px #290066",
+                  fontSize: "12px",
+                }}
                 color={theme.secondary}
               >
-                {languages.results.map((l) => {
-                  return (
-                    <MenuItem
-                      key={l.id}
-                      value={l.id}
-                      onClick={() => handleMenuItem(l.name)}
-                    >
-                      {l.name}
-                    </MenuItem>
-                  );
-                })}
+                {languages.results.length !== 0 ? (
+                  languages.results.map((l) => {
+                    return (
+                      <MenuItem
+                        key={l.id}
+                        value={l.id}
+                        sx={{ fontSize: "12px" }}
+                      >
+                        {l.name}
+                      </MenuItem>
+                    );
+                  })
+                ) : (
+                  <MenuItem sx={{ fontSize: "12px" }}>Add a programing language!</MenuItem>
+                )}
               </SelectCustomized>
             </FormControl>
             <Tooltip title="Add a new programing language">
@@ -313,17 +349,27 @@ export default function RightBar() {
                 id="topic"
                 value={topic ?? ""}
                 onChange={handleChange}
+                disabled={proLanguage ? false : true}
                 name="topic"
                 variant="outlined"
-                sx={{ boxShadow: "0 0 5px #21ebff, 0 0 2px #290066" }}
+                sx={{
+                  boxShadow: proLanguage
+                    ? "0 0 10px #21ebff, 0 0 5px #290066"
+                    : null,
+                  fontSize: "12px",
+                }}
                 color={theme.secondary}
                 size="small"
               >
                 {nested.results.map((n) => {
-                  return n.id === programingLanguage
+                  return n.id === proLanguage
                     ? n.topic.map((t) => {
                         return (
-                          <MenuItem value={t.id} key={t.id}>
+                          <MenuItem
+                            value={t.id}
+                            key={t.id}
+                            sx={{ fontSize: "12px" }}
+                          >
                             {t.name}
                           </MenuItem>
                         );
@@ -333,13 +379,16 @@ export default function RightBar() {
               </SelectCustomized>
             </FormControl>
             <Tooltip title="Add a new Topic">
-              <IconButton
-                size="large"
-                color="primary"
-                onClick={() => handleOpen("topic")}
-              >
-                <AddBoxIcon />
-              </IconButton>
+              <span>
+                <IconButton
+                  size="large"
+                  color="primary"
+                  onClick={() => handleOpen("topic")}
+                  disabled={proLanguage ? false : true}
+                >
+                  <AddBoxIcon />
+                </IconButton>
+              </span>
             </Tooltip>
           </Box>
 
@@ -366,18 +415,27 @@ export default function RightBar() {
               <SelectCustomized
                 labelId="subtopic"
                 label="Sub topic"
+                disabled={topic ? false : true}
                 id="topice"
                 value={subTopic ?? ""}
                 onChange={handleChange}
                 name="subtopic"
                 variant="outlined"
-                sx={{ boxShadow: "0 0 5px #21ebff, 0 0 2px #290066" }}
+                sx={{
+                  boxShadow: topic ? "0 0 10px #21ebff, 0 0 5px #290066" : null,
+                  fontSize: "12px",
+                }}
                 color={theme.secondary}
                 size="small"
               >
                 {subtopics.results.map((sub) => {
                   return (
-                    <MenuItem value={sub.id} option={sub.name} key={sub.id}>
+                    <MenuItem
+                      value={sub.id}
+                      option={sub.name}
+                      key={sub.id}
+                      sx={{ fontSize: "12px" }}
+                    >
                       {sub.name}
                     </MenuItem>
                   );
@@ -385,13 +443,16 @@ export default function RightBar() {
               </SelectCustomized>
             </FormControl>
             <Tooltip title="Add a new Sub-topic">
-              <IconButton
-                size="large"
-                color="primary"
-                onClick={() => handleOpen("subtopic")}
-              >
-                <AddBoxIcon />
-              </IconButton>
+              <span>
+                <IconButton
+                  size="large"
+                  color="primary"
+                  onClick={() => handleOpen("subtopic")}
+                  disabled={topic ? false : true}
+                >
+                  <AddBoxIcon />
+                </IconButton>
+              </span>
             </Tooltip>
           </Box>
 
@@ -411,6 +472,7 @@ export default function RightBar() {
             inputProps={{
               sx: { color: "rgba(33, 235, 255, 0.8)" },
               maxLength: 50,
+              fontSize: "8px",
             }}
           />
 

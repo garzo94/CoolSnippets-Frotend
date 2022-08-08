@@ -41,17 +41,26 @@ export function Provider({ children }) {
     });
   };
 
+  const changeBoolTwitter = (value) => {
+    dispatch({
+      type: "CHANGE_TWITTER",
+      payload: value,
+    });
+  };
+
   const value = {
     addText: state.addText,
     addTitle: state.addTitle,
     changeBack: state.background,
     query: state.query,
     programingLang: state.programingLang,
+    twitterProfile: state.twitterProfile,
     changeLanguage,
     addTitleFunc,
     addTextFunc,
     changeBackground,
     changeQuery,
+    changeBoolTwitter,
   };
 
   return <Context.Provider value={value}>{children}</Context.Provider>;

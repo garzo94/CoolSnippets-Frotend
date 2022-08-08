@@ -20,6 +20,7 @@ export default function SideBar() {
     addTitleFunc,
     changeBack,
     changeBackground,
+    changeBoolTwitter,
   } = useText();
 
   const handleClick = (event) => {
@@ -33,6 +34,9 @@ export default function SideBar() {
 
   function handleBackground(k) {
     changeBackground(k);
+  }
+  function handleBoolTwitter() {
+    changeBoolTwitter();
   }
   // const id = open ? 'simple-popover' : undefined;
 
@@ -157,6 +161,7 @@ export default function SideBar() {
             startIcon={<TwitterIcon />}
             color="primary"
             variant="outlined"
+            onClick={handleBoolTwitter}
             sx={{
               width: "70%",
               marginX: "auto",

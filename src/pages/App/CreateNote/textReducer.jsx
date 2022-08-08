@@ -4,6 +4,7 @@ export const initialState = {
   background: 0,
   query: "all",
   programingLang: "",
+  twitterProfile: false,
 };
 
 export default function textReducer(state, action) {
@@ -33,6 +34,11 @@ export default function textReducer(state, action) {
       return {
         ...state,
         programingLang: payload,
+      };
+    case "CHANGE_TWITTER":
+      return {
+        ...state,
+        twitterProfile: !state.twitterProfile,
       };
     default:
       state;

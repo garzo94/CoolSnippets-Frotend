@@ -15,6 +15,7 @@ import { dataBackground } from "./backgroundData";
 import exportAsImage from "./exportAsImage";
 import useRequestResource from "../../hooks/useRequestResource";
 import { useNavigate, useParams } from "react-router-dom";
+import Twitter from "./Twitter";
 
 export default function Main() {
   const exportRef = useRef();
@@ -30,6 +31,7 @@ export default function Main() {
     addTitleFunc,
     changeBack,
     changeBackground,
+    twitterProfile,
   } = useText();
 
   useEffect(() => {
@@ -48,6 +50,11 @@ export default function Main() {
     valueY: -100,
   });
 
+  const [Twitterposition, setTwitterposition] = useState({
+    valueX: -120,
+    valueY: 100,
+  });
+
   const eventLoggerTitle = (e, data) => {
     setTitleposition({ valueX: data.x, valueY: data.y });
   };
@@ -56,6 +63,7 @@ export default function Main() {
   };
   const [title, setTitle] = useState();
   const [text, setText] = useState();
+  const [username, setusername] = useState(null);
   const [code, setCode] = useState(null);
   const [click, setClick] = useState(false);
   const [selectValue, setSelectValue] = useState(null);
@@ -82,6 +90,9 @@ export default function Main() {
       }
       if (resource.title) {
         setTitleChange(resource.title);
+      }
+      if (resource.twitter) {
+        setUsername(resource.twitter);
       }
     }
   }, [resource]);
@@ -115,7 +126,7 @@ export default function Main() {
       <Box>
         <FormControl
           sx={{
-            width: "200px",
+            width: "220px",
             ml: 5,
             borderRadius: "10px",
             bgcolor: "rgba(25,51,77,0.2)",
@@ -126,7 +137,7 @@ export default function Main() {
             color="secondary"
             sx={{ color: theme.palette.secondary.main }}
           >
-            Language
+            Code Editor Language
           </InputLabel>
           <SelectCustomizedLanguage
             labelId="language"
@@ -228,6 +239,9 @@ export default function Main() {
               </h3>
             </Draggable>
           ) : null}
+
+          {twitterProfile ? <Twitter username={username} /> : null}
+
           <ClickAwayListener onClickAway={handleClickAway}>
             <CodeEditor
               value={code}

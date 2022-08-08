@@ -52,7 +52,7 @@ const resetPassword = useCallback((data, succesCallback)=>{
     const register = useCallback(({username, email, password}, succesCallback)=>{
       axios.post("/api/auth/users/", {username, email, password})
         .then((res)=>{
-         enqueueSnackbar('you have registered successfully! Now you can Sign In')
+         enqueueSnackbar('you have registered successfully! Now you can Sign In!')
           if (succesCallback){
             succesCallback()
           }

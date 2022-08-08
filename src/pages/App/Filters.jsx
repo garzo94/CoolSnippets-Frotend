@@ -93,17 +93,17 @@ export default function Filters() {
           sx={{ boxShadow: "0 0 10px #21ebff, 0 0 7px #290066" }}
           color={theme.secondary}
         >
-          {languages.results.map((l) => {
-            return (
-              <MenuItem
-                key={l.id}
-                value={l.id}
-                onClick={() => handleMenuItem(l.name)}
-              >
-                {l.name}
-              </MenuItem>
-            );
-          })}
+          {languages.results.length !== 0 ? (
+            languages.results.map((l) => {
+              return (
+                <MenuItem key={l.id} value={l.id} sx={{ fontSize: "12px" }}>
+                  {l.name}
+                </MenuItem>
+              );
+            })
+          ) : (
+            <MenuItem sx={{ fontSize: "12px" }}>No languages yet!</MenuItem>
+          )}
         </SelectCustomized>
       </FormControl>
 
