@@ -9,6 +9,7 @@ import Popover from "@mui/material/Popover";
 import useText from "./Context";
 import Grid from "@mui/material/Grid";
 import { dataBackground } from "./backgroundData";
+import { useSnackbar } from "notistack";
 
 export default function SideBar() {
   // background --------
@@ -18,9 +19,13 @@ export default function SideBar() {
     addTitle,
     addTextFunc,
     addTitleFunc,
-    changeBack,
     changeBackground,
     changeBoolTwitter,
+
+    text,
+    title,
+    twitter,
+    changeBack,
   } = useText();
 
   const handleClick = (event) => {

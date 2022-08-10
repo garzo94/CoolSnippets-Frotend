@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import TwitterIcon from "@mui/icons-material/Twitter";
 
-export default function Twitter({ username }) {
+export default function Twitter({ username, handle }) {
   return (
     <Box
       sx={{
@@ -36,7 +36,7 @@ export default function Twitter({ username }) {
         <Box
           suppressContentEditableWarning={true}
           contentEditable="true"
-          onInput={(e) => handleChangeUsernameTwitter(e)}
+          onInput={(e) => handle(e)}
           style={{
             color: "#1DA1F2",
 

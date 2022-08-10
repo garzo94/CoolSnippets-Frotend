@@ -41,10 +41,65 @@ export function Provider({ children }) {
     });
   };
 
-  const changeBoolTwitter = (value) => {
+  const changeBoolTwitter = () => {
     dispatch({
       type: "CHANGE_TWITTER",
+    });
+  };
+
+  const Twitter = (value) => {
+    dispatch({
+      type: "USERNAME",
       payload: value,
+    });
+  };
+
+  const Text = (value) => {
+    dispatch({
+      type: "TEXT",
+      payload: value,
+    });
+  };
+
+  const TitlePositionFunc = (value) => {
+    console.log(value);
+    dispatch({
+      type: "TITLE_POSITION",
+      payload: value,
+    });
+  };
+
+  const TextPositionFunc = (value) => {
+    dispatch({
+      type: "TEXT_POSITION",
+      payload: value,
+    });
+  };
+
+  const Title = (value) => {
+    dispatch({
+      type: "TITLE",
+      payload: value,
+    });
+  };
+
+  const Code = (value) => {
+    dispatch({
+      type: "CODE",
+      payload: value,
+    });
+  };
+
+  const ImageFunc = (value) => {
+    dispatch({
+      type: "IMAGE",
+      payload: value,
+    });
+  };
+
+  const Save = (value) => {
+    dispatch({
+      type: "SAVE",
     });
   };
 
@@ -61,6 +116,23 @@ export function Provider({ children }) {
     changeBackground,
     changeQuery,
     changeBoolTwitter,
+
+    username: state.username,
+    text: state.text,
+    title: state.title,
+    textPosition: state.textPosition,
+    titlePosition: state.titlePosition,
+    code: state.code,
+    image: state.image,
+    save: state.save,
+    Save,
+    ImageFunc,
+    Code,
+    TextPositionFunc,
+    TitlePositionFunc,
+    Twitter,
+    Text,
+    Title,
   };
 
   return <Context.Provider value={value}>{children}</Context.Provider>;

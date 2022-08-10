@@ -19,15 +19,19 @@ import {
   DialogContentText,
   Slide,
 } from "@mui/material";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+
 import { SelectCustomized } from "../../../styles/createTheme";
 import TextField from "@mui/material/TextField";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import { ButtonCustomized } from "../../../styles/createTheme";
 import { Link, useParams } from "react-router-dom";
 import useRequestResource from "../../hooks/useRequestResource";
+import useText from "./Context";
+import { useSnackbar } from "notistack";
 
 export default function RightBar() {
+  const formData = new FormData();
+  const { enqueueSnackbar } = useSnackbar();
   const {
     resource,
     getResource,
@@ -40,18 +44,64 @@ export default function RightBar() {
     addLanguage,
     addTopic,
     addSubTopic,
+    addSnippet,
   } = useRequestResource({});
+
+  const {
+    text,
+    title,
+    username,
+    changeBack,
+    textPosition,
+    titlePosition,
+    code,
+    image,
+    Save,
+    save,
+  } = useText();
+
+  formData.append("text", text);
+  formData.append("xtext", textPosition === null ? null : textPosition.valueX);
+  formData.append(
+    "ytext",
+    titlePosition === null ? null : titlePosition.valueY
+  );
+  formData.append("title", title);
+  formData.append(
+    "xtitle",
+    titlePosition === null ? null : titlePosition.valueX
+  );
+  formData.append(
+    "Ytitle",
+    titlePosition === null ? null : titlePosition.valueY
+  );
+  formData.append("twitter", username);
+  formData.append("background", changeBack);
+  formData.append("code", code);
+
+  // const values = {
+  //   title,
+  //   xtitle: titlePosition === null ? null : titlePosition.valueX,
+  //   ytitle: titlePosition === null ? null : titlePosition.valueY,
+
+  //   background: changeBack,
+  //   image,
+  //   twitter: username,
+  //   code,
+  // };
 
   const [proLanguage, setProLanguage] = useState(null);
   const [topic, setTopic] = useState(null);
   const [subTopic, setSubTopic] = useState(null);
-  const [description, setDescription] = useState(null);
   const [dynamicText, setdynamicText] = useState(null);
   const [languageAdded, setLanguageAdded] = useState("");
   const [topicAdded, setTopicAdded] = useState("");
   const [subtopicAdded, setSubTopicAdded] = useState("");
   const [add, setAdd] = useState(null);
   const { id } = useParams();
+
+  // const imageBlob = toBlob(image);
+
   function handleChange(event) {
     switch (event.target.name) {
       case "language":
@@ -64,12 +114,16 @@ export default function RightBar() {
   }
 
   useEffect(() => {
+    getProgramingLanguages();
+    getLanguageTopicSubTopic();
+  }, [add]);
+
+  useEffect(() => {
     if (id) {
       getResource(id);
       getProgramingLanguages();
-      getLanguageTopicSubTopic();
     }
-  }, [id, add]);
+  }, [id]);
 
   useEffect(() => {
     if (resource !== null) {
@@ -80,8 +134,6 @@ export default function RightBar() {
           topic ? topic : top.id
         }/`,
       });
-
-      setDescription(resource.description);
     }
   }, [resource, topic]);
 
@@ -96,13 +148,26 @@ export default function RightBar() {
       setSubTopicAdded(event.target.value);
     }
   }
-  function handleDescription(event) {
-    setDescription(event.target.value);
+  function handleSaveEdit(e) {
+    const text = e.target.innerText;
+    if (typeof proLanguage === "number") {
+      if (text === "SAVE") {
+        Save();
+        if (image !== null) {
+          formData.append("image", image, "Mysnippe.png");
+        }
+        addSnippet(formData, { idLang: proLanguage });
+      }
+    } else {
+      enqueueSnackbar("Select a programing language!", { variant: "error" });
+    }
   }
+  // function handleDescription(event) {
+  //   setDescription(event.target.value);
+  // }
   function handleAdd() {
     if (dynamicText === "language") {
       addLanguage({ name: languageAdded });
-      getProgramingLanguages();
       setAdd([languageAdded]);
       handleOpen();
     }
@@ -308,7 +373,9 @@ export default function RightBar() {
                     );
                   })
                 ) : (
-                  <MenuItem sx={{ fontSize: "12px" }}>Add a programing language!</MenuItem>
+                  <MenuItem sx={{ fontSize: "12px" }}>
+                    No languages yet...
+                  </MenuItem>
                 )}
               </SelectCustomized>
             </FormControl>
@@ -456,7 +523,7 @@ export default function RightBar() {
             </Tooltip>
           </Box>
 
-          <TextField
+          {/* <TextField
             id="standard-basic"
             label="Add a short description"
             variant="standard"
@@ -474,13 +541,14 @@ export default function RightBar() {
               maxLength: 50,
               fontSize: "8px",
             }}
-          />
+          /> */}
 
           <ButtonCustomized
             component={Link}
             variant="contained"
             sx={{ mt: 8, borderRadius: "10px" }}
             to="/create-note"
+            onClick={handleSaveEdit}
           >
             {id ? "Edit" : "Save"}
           </ButtonCustomized>

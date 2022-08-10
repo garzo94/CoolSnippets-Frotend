@@ -143,7 +143,7 @@ export default function useRequestResource({endpoint, resourceLabel}) {
     axios.post(`/api/language/`,values,getCommonOptions())
         .then(() => {
             setLoading(false)
-            enqueueSnackbar(`No languages yet!`)
+            enqueueSnackbar(`New language added!`)
 
 
         }).catch(handleRequestResourceError)
@@ -160,14 +160,26 @@ const addTopic = useCallback((values,{id}) => {
 
       }).catch(handleRequestResourceError)
 }, [ enqueueSnackbar, , handleRequestResourceError, setLoading])
-//#######
+//####### Ad subtopic
 const addSubTopic = useCallback((values,{idLang},{idTop}) => {
 
   setLoading(true)
   axios.post(`/api/subtopic/${idLang}/${idTop}/`,values,getCommonOptions())
       .then(() => {
           setLoading(false)
-          enqueueSnackbar(`Topic added`)
+          enqueueSnackbar(`Subtopic added!`)
+
+      }).catch(handleRequestResourceError)
+}, [ enqueueSnackbar, , handleRequestResourceError, setLoading])
+//#######
+
+const addSnippet = useCallback((values,{idLang}) => {
+
+  setLoading(true)
+  axios.post(`/api/snippet/${idLang}/`,values,getCommonOptions())
+      .then(() => {
+          setLoading(false)
+          enqueueSnackbar(`Snippet Saved successfully!`)
 
       }).catch(handleRequestResourceError)
 }, [ enqueueSnackbar, , handleRequestResourceError, setLoading])
@@ -182,6 +194,7 @@ const addSubTopic = useCallback((values,{idLang},{idTop}) => {
     addLanguage,
     addTopic,
     addSubTopic,
+    addSnippet,
     resource,
     languages,
     nested,

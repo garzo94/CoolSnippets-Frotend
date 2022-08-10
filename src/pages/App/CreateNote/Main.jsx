@@ -15,7 +15,8 @@ import { dataBackground } from "./backgroundData";
 import exportAsImage from "./exportAsImage";
 import useRequestResource from "../../hooks/useRequestResource";
 import { useNavigate, useParams } from "react-router-dom";
-import Twitter from "./Twitter";
+import TwitterComponent from "./Twitter.jsx";
+import html2canvas from "html2canvas";
 
 export default function Main() {
   const exportRef = useRef();
@@ -29,9 +30,21 @@ export default function Main() {
     addTitle,
     addTextFunc,
     addTitleFunc,
-    changeBack,
     changeBackground,
     twitterProfile,
+    Twitter,
+    Text,
+    Title,
+    TextPositionFunc,
+    TitlePositionFunc,
+    Code,
+    ImageFunc,
+    save,
+    code,
+    username,
+    text,
+    title,
+    changeBack,
   } = useText();
 
   useEffect(() => {
@@ -50,33 +63,36 @@ export default function Main() {
     valueY: -100,
   });
 
-  const [Twitterposition, setTwitterposition] = useState({
-    valueX: -120,
-    valueY: 100,
-  });
-
   const eventLoggerTitle = (e, data) => {
-    setTitleposition({ valueX: data.x, valueY: data.y });
+    TitlePositionFunc({
+      valueX: Math.round(data.x),
+      valueY: Math.round(data.y),
+    });
   };
   const eventLoggerText = (e, data) => {
-    setTextposition({ valueX: data.x, valueY: data.y });
+    TextPositionFunc({
+      valueX: Math.round(data.x),
+      valueY: Math.round(data.y),
+    });
   };
-  const [title, setTitle] = useState();
-  const [text, setText] = useState();
-  const [username, setusername] = useState(null);
-  const [code, setCode] = useState(null);
+
   const [click, setClick] = useState(false);
   const [selectValue, setSelectValue] = useState(null);
+  var toBlob = require("canvas-to-blob");
+
+  useEffect(() => {
+    html2canvas(document.getElementById("domEl")).then((canvas) => {
+      ImageFunc(toBlob(canvas.toDataURL("image/png")));
+    });
+  }, [save, code, text, title, username, changeBack]);
 
   useEffect(() => {
     if (resource) {
       if (resource.text !== "") {
         addTextFunc();
-        setText(resource.text);
       }
       if (resource.title !== "") {
         addTitleFunc();
-        setTitle(resource.title);
       }
       if (resource.background) {
         changeBackground(resource.background);
@@ -91,9 +107,6 @@ export default function Main() {
       if (resource.title) {
         setTitleChange(resource.title);
       }
-      if (resource.twitter) {
-        setUsername(resource.twitter);
-      }
     }
   }, [resource]);
 
@@ -106,10 +119,15 @@ export default function Main() {
     }
   }
   function handleChangeTitle(e) {
-    setTitle(e.target.textContent);
+    Title(e.target.textContent);
   }
+
   function handleChangeText(e) {
-    setText(e.target.textContent);
+    Text(e.target.textContent);
+  }
+
+  function handleTwitter(e) {
+    Twitter(e.target.textContent);
   }
   function handleClick() {
     setClick(true);
@@ -137,7 +155,7 @@ export default function Main() {
             color="secondary"
             sx={{ color: theme.palette.secondary.main }}
           >
-            Code Editor Language
+            Code Editor
           </InputLabel>
           <SelectCustomizedLanguage
             labelId="language"
@@ -240,14 +258,16 @@ export default function Main() {
             </Draggable>
           ) : null}
 
-          {twitterProfile ? <Twitter username={username} /> : null}
+          {twitterProfile ? (
+            <TwitterComponent username={username} handle={handleTwitter} />
+          ) : null}
 
           <ClickAwayListener onClickAway={handleClickAway}>
             <CodeEditor
               value={code}
               language={selectValue ?? ""}
               placeholder="Paste your code here!"
-              onChange={(evn) => setCode(evn.target.value)}
+              onChange={(evn) => Code(evn.target.value)}
               padding={35}
               minHeight={200}
               onClick={handleClick}

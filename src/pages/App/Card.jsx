@@ -183,7 +183,7 @@ export default function CardNote({
               component="div"
               sx={{ mt: 0, mb: 0, p: 0, fontWeight: "700" }}
             >
-              {topic.name}
+              {topic !== null ? topic.name : ""}
             </Typography>
             <Typography
               gutterBottom
@@ -191,7 +191,7 @@ export default function CardNote({
               component="div"
               sx={{ mt: 0, mb: 0, p: 0, fontSize: 18 }}
             >
-              {subtopic.name}
+              {subtopic !== null ? subtopic.name : ""}
             </Typography>
             <Typography
               gutterBottom
@@ -210,11 +210,8 @@ export default function CardNote({
               color="primary"
               sx={{ color: "red" }}
             >
-              <IconButton>
-                <EditIcon
-                  color="secondary"
-                  onClick={() => navigate(`/create-note/edit/${id}`)}
-                />
+              <IconButton onClick={() => navigate(`/create-note/edit/${id}`)}>
+                <EditIcon color="secondary" />
               </IconButton>
             </TooltipCustomized>
 
