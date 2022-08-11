@@ -97,9 +97,23 @@ export function Provider({ children }) {
     });
   };
 
-  const Save = (value) => {
+  const Save = () => {
     dispatch({
       type: "SAVE",
+    });
+  };
+
+  const ProLanguage = (values) => {
+    dispatch({
+      type: "PRO_LANGUAGE",
+      payload: values,
+    });
+  };
+
+  const QuerySnippet = (values) => {
+    dispatch({
+      type: "QUERY_SNIPPET",
+      payload: values,
     });
   };
 
@@ -116,7 +130,8 @@ export function Provider({ children }) {
     changeBackground,
     changeQuery,
     changeBoolTwitter,
-
+    QuerySnippet,
+    querySnippet: state.querySnippet,
     username: state.username,
     text: state.text,
     title: state.title,
@@ -125,6 +140,8 @@ export function Provider({ children }) {
     code: state.code,
     image: state.image,
     save: state.save,
+    prolanguage: state.prolanguage,
+    ProLanguage,
     Save,
     ImageFunc,
     Code,

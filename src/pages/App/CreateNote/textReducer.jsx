@@ -3,6 +3,7 @@ export const initialState = {
   addTitle: false,
   background: 0,
   query: "all",
+  querySnippet: "",
   programingLang: "",
   twitterProfile: false,
 
@@ -14,6 +15,7 @@ export const initialState = {
   code: null,
   image: null,
   save: false,
+  prolanguage: null,
 };
 
 export default function textReducer(state, action) {
@@ -92,6 +94,18 @@ export default function textReducer(state, action) {
       return {
         ...state,
         save: !state.save,
+      };
+
+    case "PRO_LANGUAGE":
+      return {
+        ...state,
+        prolanguage: payload,
+      };
+
+    case "QUERY_SNIPPET":
+      return {
+        ...state,
+        querySnippet: payload,
       };
 
     default:

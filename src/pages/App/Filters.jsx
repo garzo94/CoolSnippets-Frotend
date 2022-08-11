@@ -8,7 +8,6 @@ import useRequestResource from "../hooks/useRequestResource";
 import useText from "./CreateNote/Context";
 
 export default function Filters() {
-  const languageRef = useRef();
   const { changeQuery, changeLanguage } = useText();
   const {
     getProgramingLanguages,
@@ -27,8 +26,8 @@ export default function Filters() {
     getLanguageTopicSubTopic();
   }, []);
 
-  function handleMenuItem(language) {
-    changeLanguage(language);
+  function handleMenuItem(e) {
+    changeLanguage(e.target.innerText);
   }
 
   const handleChange = (event) => {
@@ -96,13 +95,18 @@ export default function Filters() {
           {languages.results.length !== 0 ? (
             languages.results.map((l) => {
               return (
-                <MenuItem key={l.id} value={l.id} sx={{ fontSize: "12px" }}>
+                <MenuItem
+                  key={l.id}
+                  value={l.id}
+                  onClick={handleMenuItem}
+                  sx={{ fontSize: "12px" }}
+                >
                   {l.name}
                 </MenuItem>
               );
             })
           ) : (
-            <MenuItem sx={{ fontSize: "12px" }}>No languages yet!</MenuItem>
+            <MenuItem sx={{ fontSize: "12px" }}>Create a new Snippet!</MenuItem>
           )}
         </SelectCustomized>
       </FormControl>

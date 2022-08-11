@@ -173,10 +173,10 @@ const addSubTopic = useCallback((values,{idLang},{idTop}) => {
 }, [ enqueueSnackbar, , handleRequestResourceError, setLoading])
 //#######
 
-const addSnippet = useCallback((values,{idLang}) => {
-
+const addSnippet = useCallback((values,{querySnippet}) => {
+  console.log(querySnippet)
   setLoading(true)
-  axios.post(`/api/snippet/${idLang}/`,values,getCommonOptions())
+  axios.post(`/api/snippet/${querySnippet}/`,values,getCommonOptions())
       .then(() => {
           setLoading(false)
           enqueueSnackbar(`Snippet Saved successfully!`)

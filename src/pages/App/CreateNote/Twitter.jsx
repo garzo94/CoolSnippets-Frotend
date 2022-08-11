@@ -49,7 +49,7 @@ export default function Twitter({ username, handle }) {
               mr: 0.1,
             }}
           >
-            {username ?? "@username"}
+            {username}
           </Typography>
         </Box>
       </Box>

@@ -12,12 +12,6 @@ import {
   Button,
   Modal,
   ThemeProvider,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  Slide,
 } from "@mui/material";
 
 import { SelectCustomized } from "../../../styles/createTheme";
@@ -57,40 +51,18 @@ export default function RightBar() {
     code,
     image,
     Save,
-    save,
+    ProLanguage,
+    prolanguage,
+    querySnippet,
+    QuerySnippet,
   } = useText();
 
   formData.append("text", text);
-  formData.append("xtext", textPosition === null ? null : textPosition.valueX);
-  formData.append(
-    "ytext",
-    titlePosition === null ? null : titlePosition.valueY
-  );
   formData.append("title", title);
-  formData.append(
-    "xtitle",
-    titlePosition === null ? null : titlePosition.valueX
-  );
-  formData.append(
-    "Ytitle",
-    titlePosition === null ? null : titlePosition.valueY
-  );
   formData.append("twitter", username);
   formData.append("background", changeBack);
   formData.append("code", code);
 
-  // const values = {
-  //   title,
-  //   xtitle: titlePosition === null ? null : titlePosition.valueX,
-  //   ytitle: titlePosition === null ? null : titlePosition.valueY,
-
-  //   background: changeBack,
-  //   image,
-  //   twitter: username,
-  //   code,
-  // };
-
-  const [proLanguage, setProLanguage] = useState(null);
   const [topic, setTopic] = useState(null);
   const [subTopic, setSubTopic] = useState(null);
   const [dynamicText, setdynamicText] = useState(null);
@@ -100,12 +72,14 @@ export default function RightBar() {
   const [add, setAdd] = useState(null);
   const { id } = useParams();
 
-  // const imageBlob = toBlob(image);
-
   function handleChange(event) {
     switch (event.target.name) {
       case "language":
-        return setProLanguage(event.target.value);
+        setTopic(null);
+        setSubTopic(null);
+        ProLanguage(event.target.value);
+        QuerySnippet(`${event.target.value}`);
+
       case "topic":
         return setTopic(event.target.value);
       case "subtopic":
@@ -116,7 +90,20 @@ export default function RightBar() {
   useEffect(() => {
     getProgramingLanguages();
     getLanguageTopicSubTopic();
+    if (prolanguage !== null && topic !== null) {
+      getSubTopics({
+        query: `${prolanguage}/${topic}/`,
+      });
+    }
   }, [add]);
+
+  useEffect(() => {
+    if (prolanguage !== null && topic !== null) {
+      getSubTopics({
+        query: `${prolanguage}/${topic}/`,
+      });
+    }
+  }, [topic]);
 
   useEffect(() => {
     if (id) {
@@ -130,12 +117,12 @@ export default function RightBar() {
       var lan = resource.language;
       var top = resource.topic;
       getSubTopics({
-        query: `${proLanguage ? proLanguage : lan.id}/${
+        query: `${prolanguage ? prolanguage : lan.id}/${
           topic ? topic : top.id
         }/`,
       });
     }
-  }, [resource, topic]);
+  }, [resource, topic, prolanguage]);
 
   function handleTextFieldText(event) {
     if (dynamicText === "language") {
@@ -150,21 +137,27 @@ export default function RightBar() {
   }
   function handleSaveEdit(e) {
     const text = e.target.innerText;
-    if (typeof proLanguage === "number") {
+    if (typeof prolanguage === "number") {
       if (text === "SAVE") {
         Save();
         if (image !== null) {
           formData.append("image", image, "Mysnippe.png");
         }
-        addSnippet(formData, { idLang: proLanguage });
+        if (textPosition !== null) {
+          formData.append("xtext", textPosition.valueX);
+          formData.append("ytext", textPosition.valueY);
+        }
+        if (titlePosition !== null) {
+          formData.append("xtitle", titlePosition.valueX);
+          formData.append("ytile", titlePosition.valueY);
+        }
+
+        addSnippet(formData, querySnippet);
       }
     } else {
       enqueueSnackbar("Select a programing language!", { variant: "error" });
     }
   }
-  // function handleDescription(event) {
-  //   setDescription(event.target.value);
-  // }
   function handleAdd() {
     if (dynamicText === "language") {
       addLanguage({ name: languageAdded });
@@ -172,35 +165,22 @@ export default function RightBar() {
       handleOpen();
     }
     if (dynamicText === "topic") {
-      addTopic({ name: topicAdded }, { id: proLanguage });
+      addTopic({ name: topicAdded }, { id: prolanguage });
       setAdd([languageAdded, topicAdded]);
       handleOpen();
     }
     if (dynamicText === "subtopic") {
       addSubTopic(
         { name: subtopicAdded },
-        { idLang: proLanguage },
+        { idLang: prolanguage },
         { idTop: topic }
       );
       setAdd([subtopicAdded]);
       handleOpen();
     }
   }
-  // Delete Dialog Alert
-  const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
-  const [openAlert, setOpenAlert] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleCloseAlert = () => {
-    setOpen(false);
-  };
   //Modal Create language, topic or subtopic
-
   const [open, setOpen] = useState(false);
   function handleOpen(value) {
     switch (value) {
@@ -244,7 +224,6 @@ export default function RightBar() {
           variant="filled"
           color="secondary"
           focused
-          // value={languageAdded}
           onChange={handleTextFieldText}
           sx={{
             width: "80%",
@@ -274,28 +253,6 @@ export default function RightBar() {
       </Box>
     </Modal>
   );
-  // Alert Dialog Format
-  // const alertDelete = (
-  //   <Dialog
-  //     open={open}
-  //     TransitionComponent={Transition}
-  //     keepMounted
-  //     onClose={handleCloseAlert}
-  //     aria-describedby="alert-dialog-slide"
-  //   >
-  //     <DialogTitle>{"Are you sure you want to delete this?"}</DialogTitle>
-  //     <DialogContent>
-  //       <DialogContentText id="alert-dialog-slide-description">
-  //         If you delete this, all notes related to this programming language
-  //         will be deleted too.
-  //       </DialogContentText>
-  //     </DialogContent>
-  //     <DialogActions>
-  //       <Button onClick={handleCloseAlert}>Yes, delete it!</Button>
-  //       <Button onClick={handleCloseAlert}>No!</Button>
-  //     </DialogActions>
-  //   </Dialog>
-  // );
 
   return (
     <ThemeProvider theme={theme}>
@@ -349,7 +306,7 @@ export default function RightBar() {
                 labelId="language-label"
                 label="Language"
                 id="language"
-                value={proLanguage ?? ""}
+                value={prolanguage ?? ""}
                 onChange={handleChange}
                 name="language"
                 variant="outlined"
@@ -416,11 +373,11 @@ export default function RightBar() {
                 id="topic"
                 value={topic ?? ""}
                 onChange={handleChange}
-                disabled={proLanguage ? false : true}
+                disabled={prolanguage ? false : true}
                 name="topic"
                 variant="outlined"
                 sx={{
-                  boxShadow: proLanguage
+                  boxShadow: prolanguage
                     ? "0 0 10px #21ebff, 0 0 5px #290066"
                     : null,
                   fontSize: "12px",
@@ -428,21 +385,27 @@ export default function RightBar() {
                 color={theme.secondary}
                 size="small"
               >
-                {nested.results.map((n) => {
-                  return n.id === proLanguage
-                    ? n.topic.map((t) => {
-                        return (
-                          <MenuItem
-                            value={t.id}
-                            key={t.id}
-                            sx={{ fontSize: "12px" }}
-                          >
-                            {t.name}
-                          </MenuItem>
-                        );
-                      })
-                    : null;
-                })}
+                {nested.results.length !== 0 ? (
+                  nested.results.map((n) => {
+                    return n.id === prolanguage
+                      ? n.topic.map((t) => {
+                          return (
+                            <MenuItem
+                              value={t.id}
+                              key={t.id}
+                              sx={{ fontSize: "12px" }}
+                            >
+                              {t.name}
+                            </MenuItem>
+                          );
+                        })
+                      : null;
+                  })
+                ) : (
+                  <MenuItem sx={{ fontSize: "12px" }}>
+                    No topics yet...
+                  </MenuItem>
+                )}
               </SelectCustomized>
             </FormControl>
             <Tooltip title="Add a new Topic">
@@ -451,7 +414,7 @@ export default function RightBar() {
                   size="large"
                   color="primary"
                   onClick={() => handleOpen("topic")}
-                  disabled={proLanguage ? false : true}
+                  disabled={prolanguage ? false : true}
                 >
                   <AddBoxIcon />
                 </IconButton>
@@ -495,18 +458,24 @@ export default function RightBar() {
                 color={theme.secondary}
                 size="small"
               >
-                {subtopics.results.map((sub) => {
-                  return (
-                    <MenuItem
-                      value={sub.id}
-                      option={sub.name}
-                      key={sub.id}
-                      sx={{ fontSize: "12px" }}
-                    >
-                      {sub.name}
-                    </MenuItem>
-                  );
-                })}
+                {subtopics.results.length !== 0 ? (
+                  subtopics.results.map((sub) => {
+                    return (
+                      <MenuItem
+                        value={sub.id}
+                        option={sub.name}
+                        key={sub.id}
+                        sx={{ fontSize: "12px" }}
+                      >
+                        {sub.name}
+                      </MenuItem>
+                    );
+                  })
+                ) : (
+                  <MenuItem sx={{ fontSize: "12px" }}>
+                    No subtopics yet...
+                  </MenuItem>
+                )}
               </SelectCustomized>
             </FormControl>
             <Tooltip title="Add a new Sub-topic">
@@ -546,7 +515,7 @@ export default function RightBar() {
           <ButtonCustomized
             component={Link}
             variant="contained"
-            sx={{ mt: 8, borderRadius: "10px" }}
+            sx={{ mt: 15, borderRadius: "10px" }}
             to="/create-note"
             onClick={handleSaveEdit}
           >

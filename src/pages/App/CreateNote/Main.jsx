@@ -17,6 +17,7 @@ import useRequestResource from "../../hooks/useRequestResource";
 import { useNavigate, useParams } from "react-router-dom";
 import TwitterComponent from "./Twitter.jsx";
 import html2canvas from "html2canvas";
+import domtoimage from "dom-to-image";
 
 export default function Main() {
   const exportRef = useRef();
@@ -24,6 +25,7 @@ export default function Main() {
   const { resource, getResource } = useRequestResource({});
   const [textChange, setTextChange] = useState("Write your text here!");
   const [titleChange, setTitleChange] = useState("Write your title here!");
+  const [twitterChange, setTwitterChange] = useState("@username");
 
   const {
     addText,
@@ -41,10 +43,8 @@ export default function Main() {
     ImageFunc,
     save,
     code,
-    username,
-    text,
-    title,
     changeBack,
+    prolanguage,
   } = useText();
 
   useEffect(() => {
@@ -81,10 +81,10 @@ export default function Main() {
   var toBlob = require("canvas-to-blob");
 
   useEffect(() => {
-    html2canvas(document.getElementById("domEl")).then((canvas) => {
-      ImageFunc(toBlob(canvas.toDataURL("image/png")));
+    domtoimage.toPng(document.getElementById("domEl")).then(function (dataUrl) {
+      ImageFunc(toBlob(dataUrl));
     });
-  }, [save, code, text, title, username, changeBack]);
+  }, [save, prolanguage, changeBack]);
 
   useEffect(() => {
     if (resource) {
@@ -185,7 +185,7 @@ export default function Main() {
             width: "auto",
             height: "100%",
             background: dataBackground[changeBack],
-
+            maxWidth: "800px",
             borderRadius: "25px",
             display: "flex",
             justifyContent: "center",
@@ -217,8 +217,8 @@ export default function Main() {
               >
                 <Typography
                   sx={{
-                    fontFamily: "'Edu TAS Beginner', cursive;",
-                    fontSize: "1.5rem",
+                    fontStyle: "italic",
+                    fontSize: "1rem",
                   }}
                 >
                   {textChange}
@@ -248,9 +248,8 @@ export default function Main() {
                   cursor: "grab",
                   color: "#fff",
                   position: "absolute",
-                  m: 20,
-                  fontFamily: '"Edu NSW ACT Foundation", cursive',
-                  fontSize: "2rem",
+                  fontStyle: "italic",
+                  fontSize: "1.5rem",
                 }}
               >
                 {titleChange}
@@ -259,7 +258,7 @@ export default function Main() {
           ) : null}
 
           {twitterProfile ? (
-            <TwitterComponent username={username} handle={handleTwitter} />
+            <TwitterComponent username={twitterChange} handle={handleTwitter} />
           ) : null}
 
           <ClickAwayListener onClickAway={handleClickAway}>
@@ -268,7 +267,7 @@ export default function Main() {
               language={selectValue ?? ""}
               placeholder="Paste your code here!"
               onChange={(evn) => Code(evn.target.value)}
-              padding={35}
+              padding={25}
               minHeight={200}
               onClick={handleClick}
               className={click ? "grabber" : null}
@@ -279,6 +278,7 @@ export default function Main() {
                   "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
                 borderRadius: "15px",
                 maxWidth: "88%",
+                minWidth: "250px",
                 minHeight: "200px",
                 maxHeight: "100%",
                 resize: "both",

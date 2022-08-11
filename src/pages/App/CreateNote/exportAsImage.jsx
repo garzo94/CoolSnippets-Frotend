@@ -1,13 +1,22 @@
 import html2canvas from "html2canvas";
+import domtoimage from "dom-to-image";
 
 const exportAsImage = async (el, imageFileName) => {
-  const canvas = await html2canvas(el, { backgroundColor: "rgba(0,0,0,0)" });
-  console.log(canvas, "canvas");
-  const image = canvas.toDataURL("image/svg", 1.0);
+  // const canvas = await html2canvas(el, {
+  //   backgroundColor: "rgba(0,0,0,0)",
+  //   scale: 4,
+  // });
+  // const image = canvas.toDataURL("image/jpge");
+  domtoimage
+    .toPng(el)
+    .then(function (dataUrl) {
+      const image = dataUrl;
 
-  // const image = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
-
-  downloadImage(image, imageFileName);
+      downloadImage(image, imageFileName);
+    })
+    .catch(function (error) {
+      console.error("oops, something went wrong!", error);
+    });
 };
 
 const downloadImage = (blob, fileName) => {

@@ -56,7 +56,7 @@ export default function Dashboard() {
             color: `${theme.palette.secondary.main}`,
             fontFamily: "Nanum Gothic Coding",
             mt: 2,
-            fontSize: { lg: 32, md: 28, sm: 25, xs: 18 },
+            fontSize: { lg: 30, md: 25, sm: 22, xs: 18 },
             fontWeight: { lg: "900", md: "600", sm: "500", xs: "400" },
             color: {
               xl: theme.palette.secondary.main,
@@ -70,7 +70,8 @@ export default function Dashboard() {
             zIndex: "mobileStepper",
           }}
         >
-          Your Notes of {programingLang !== "" ? programingLang + ":" : "..."}
+          Your Snippets of{" "}
+          {programingLang !== "" ? programingLang + ":" : "..."}
         </Typography>
         <Box
           sx={{
@@ -85,8 +86,9 @@ export default function Dashboard() {
             component={Link}
             variant="contained"
             to="/create-note"
+            sx={{ borderRadius: "15px" }}
           >
-            Create Note
+            Create Snippet
           </ButtonCustomized>
         </Box>
         {/* {resourceList.results.map((s) => {
