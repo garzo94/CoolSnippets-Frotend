@@ -144,6 +144,7 @@ export default function CardNote({
         <Card
           sx={{
             maxWidth: 250,
+
             p: 2,
             WebkitBackdropFilter: "blur(15px)",
             backdropFilter: "blur(15px)",
@@ -151,13 +152,6 @@ export default function CardNote({
               "linear-gradient(180deg,rgba(41, 0, 102, 0.6),rgba(25, 51, 77, 0.8))",
 
             borderRadius: "20px",
-            transition: "0.5s",
-
-            "&:hover": {
-              background:
-                "linear-gradient(180deg,rgba(41, 0, 102, 0.5),rgba(25, 51, 77, 0.7))",
-              boxShadow: "0 0 15px #19334d, 0 0 10px #21ebff",
-            },
           }}
         >
           <CardMedia
@@ -168,42 +162,37 @@ export default function CardNote({
             sx={{ borderRadius: "20px", cursor: "pointer" }}
             onClick={handleOpen}
           />
-          <CardContent sx={{ textAlign: "center", color: "white" }}>
+          <CardContent sx={{ textAlign: "center", color: "white", mb: "auto" }}>
             <Typography
               gutterBottom
-              variant="h5"
+              variant="h4"
               component="div"
-              sx={{ m: 0, p: 0, fontWeight: "700" }}
+              sx={{ m: 0, p: 0, fontWeight: "600", fontSize: 30 }}
             >
               {language.name}
             </Typography>
             <Typography
               gutterBottom
-              variant="h6"
+              variant="h5"
               component="div"
-              sx={{ mt: 0, mb: 0, p: 0, fontWeight: "700" }}
+              sx={{ mt: 0, mb: 0, p: 0, fontWeight: "400" }}
             >
-              {topic !== null ? topic.name : ""}
+              {topic !== null ? topic.name : "....."}
             </Typography>
             <Typography
               gutterBottom
               variant="h6"
               component="div"
-              sx={{ mt: 0, mb: 0, p: 0, fontSize: 18 }}
+              sx={{ mt: 0, mb: 0, p: 0, fontSize: 14 }}
             >
-              {subtopic !== null ? subtopic.name : ""}
-            </Typography>
-            <Typography
-              gutterBottom
-              variant="body2"
-              component="div"
-              sx={{ mt: 0, p: 0, fontSize: 14, fontStyle: "italic" }}
-            >
-              {description}
+              {subtopic !== null ? subtopic.name : "..."}
             </Typography>
           </CardContent>
           <CardActions
-            sx={{ dispaly: "flex", justifyContent: "center", mb: 0, pb: 0 }}
+            sx={{
+              mt: "auto",
+              justifyContent: "center",
+            }}
           >
             <TooltipCustomized
               title="Edit"

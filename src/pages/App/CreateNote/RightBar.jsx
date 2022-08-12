@@ -71,7 +71,7 @@ export default function RightBar() {
   const [subtopicAdded, setSubTopicAdded] = useState("");
   const [add, setAdd] = useState(null);
   const { id } = useParams();
-
+  console.log(querySnippet, "myquerysnipetttttt");
   function handleChange(event) {
     switch (event.target.name) {
       case "language":
@@ -81,9 +81,11 @@ export default function RightBar() {
         QuerySnippet(`${event.target.value}`);
 
       case "topic":
-        return setTopic(event.target.value);
+        setTopic(event.target.value);
+        QuerySnippet(`${prolanguage}/${event.target.value}`);
       case "subtopic":
-        return setSubTopic(event.target.value);
+        QuerySnippet(`${prolanguage}/${topic}/${event.target.value}`);
+        setSubTopic(event.target.value);
     }
   }
 

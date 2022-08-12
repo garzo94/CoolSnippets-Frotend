@@ -135,7 +135,7 @@ export const theme = createTheme({
     [`& .${tooltipClasses.tooltip}`]: {
       backgroundColor: theme.palette.secondary.main,
       color: 'white',
-      boxShadow: theme.shadows[1],
+
       fontSize: 11,
     },
   }));

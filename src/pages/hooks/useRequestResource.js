@@ -35,7 +35,7 @@ export default function useRequestResource({endpoint, resourceLabel}) {
     const getResourceList = useCallback(({query})=>{
         setLoading(true)
 
-        axios.get(`/api/snippet-list/${query}/`, getCommonOptions())
+        axios.get(`/api/snippet-list/${query}`, getCommonOptions())
           .then((res)=>{
 
             setLoading(false)
@@ -173,8 +173,8 @@ const addSubTopic = useCallback((values,{idLang},{idTop}) => {
 }, [ enqueueSnackbar, , handleRequestResourceError, setLoading])
 //#######
 
-const addSnippet = useCallback((values,{querySnippet}) => {
-  console.log(querySnippet)
+const addSnippet = useCallback((values,querySnippet) => {
+  console.log(querySnippet,'mysnipetttttttttttt')
   setLoading(true)
   axios.post(`/api/snippet/${querySnippet}/`,values,getCommonOptions())
       .then(() => {

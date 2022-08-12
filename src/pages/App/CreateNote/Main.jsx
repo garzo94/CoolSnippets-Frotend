@@ -16,7 +16,6 @@ import exportAsImage from "./exportAsImage";
 import useRequestResource from "../../hooks/useRequestResource";
 import { useNavigate, useParams } from "react-router-dom";
 import TwitterComponent from "./Twitter.jsx";
-import html2canvas from "html2canvas";
 import domtoimage from "dom-to-image";
 
 export default function Main() {
@@ -45,6 +44,7 @@ export default function Main() {
     code,
     changeBack,
     prolanguage,
+    changeBoolTwitter,
   } = useText();
 
   useEffect(() => {
@@ -87,6 +87,18 @@ export default function Main() {
   }, [save, prolanguage, changeBack]);
 
   useEffect(() => {
+    Text(textChange);
+  }, [addText]);
+
+  useEffect(() => {
+    Title(textChange);
+  }, [titleChange]);
+
+  useEffect(() => {
+    Twitter(twitterChange);
+  }, [twitterProfile]);
+
+  useEffect(() => {
     if (resource) {
       if (resource.text !== "") {
         addTextFunc();
@@ -106,6 +118,13 @@ export default function Main() {
       }
       if (resource.title) {
         setTitleChange(resource.title);
+      }
+      if (resource.twitter) {
+        setTwitterChange(resource.twitter);
+        changeBoolTwitter();
+      }
+      if (resource.code) {
+        Code(resource.code);
       }
     }
   }, [resource]);

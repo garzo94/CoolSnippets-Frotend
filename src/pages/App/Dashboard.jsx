@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Filters from "./Filters";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import { Typography, Box, Grid } from "@mui/material";
 import { theme } from "../../styles/createTheme";
 import { ButtonCustomized } from "../../styles/createTheme";
@@ -8,8 +8,28 @@ import { ThemeProvider } from "@mui/material/styles";
 import CardNote from "./Card";
 import useRequestResource from "../hooks/useRequestResource";
 import useText from "./CreateNote/Context";
+import Pagination from "@mui/material/Pagination";
+import queryString from "query-string";
+
+const pageSize = 8;
 
 export default function Dashboard() {
+  //pagination
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const queryPag = queryString.parse(location.search);
+
+  const handleChangePagination = (event, value) => {
+    const newQuery = {
+      ...queryPag,
+      page: value,
+    };
+    const newSearch = queryString.stringify(newQuery);
+
+    navigate(`${location.pathname}?${newSearch}`);
+    getResourceList({ query: `${query}?${newSearch}` });
+  }; //#####
   const { query, programingLang } = useText();
   const {
     resourceList,
@@ -20,6 +40,7 @@ export default function Dashboard() {
   } = useRequestResource({});
   const { id } = useParams();
 
+  console.log(Math.ceil(resourceList.count / pageSize), "my math number");
   useEffect(() => {
     getResourceList({ query: query });
   }, [query]);
@@ -34,7 +55,7 @@ export default function Dashboard() {
     deleteResource(key);
   };
   return (
-    <div style={{ padding: 2, position: "relative" }}>
+    <div style={{ padding: 2, position: "relative", alignContent: "center" }}>
       <ThemeProvider theme={theme}>
         <Box
           sx={{
@@ -91,9 +112,7 @@ export default function Dashboard() {
             Create Snippet
           </ButtonCustomized>
         </Box>
-        {/* {resourceList.results.map((s) => {
-          return <CardNote key={s.id} />;
-        })} */}
+
         <Grid
           container
           spacing={2}
@@ -119,6 +138,22 @@ export default function Dashboard() {
             );
           })}
         </Grid>
+        <Pagination
+          color="secondary"
+          sx={{
+            color: "white",
+            m: 10,
+            display: "flex",
+            justifyContent: "center",
+          }}
+          count={
+            typeof resourceList.count === "number"
+              ? Math.ceil(resourceList.count / pageSize)
+              : 1
+          }
+          page={queryPag.page ? parseInt(queryPag.page) : 1}
+          onChange={handleChangePagination}
+        />
       </ThemeProvider>
     </div>
   );

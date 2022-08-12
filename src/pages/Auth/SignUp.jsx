@@ -98,7 +98,7 @@ export default function SignUp() {
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
-        <Box
+        {/* <Box
           component={Grid}
           item
           md={7}
@@ -141,7 +141,7 @@ export default function SignUp() {
             alt="Side image"
             src={Image}
           />
-        </Box>
+        </Box> */}
 
         <Grid item xs={12} sm={6} md={5} component={Paper} elevation={6} square>
           <Box
@@ -241,7 +241,7 @@ export default function SignUp() {
               </Button>
               <Grid container>
                 <Grid item>
-                  <Link href="/signup" variant="body2">
+                  <Link href="/signin" variant="body2">
                     {"Already have an account? Sign In"}
                   </Link>
                 </Grid>
