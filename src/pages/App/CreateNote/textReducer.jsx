@@ -16,6 +16,8 @@ export const initialState = {
   image: null,
   save: false,
   prolanguage: null,
+  edit: false,
+  queryEdit:"",
 };
 
 export default function textReducer(state, action) {
@@ -106,6 +108,18 @@ export default function textReducer(state, action) {
       return {
         ...state,
         querySnippet: payload,
+      };
+
+    case "EDIT":
+      return {
+        ...state,
+        edit: !state.edit,
+      };
+
+    case "QUERY_EDIT":
+      return {
+        ...state,
+        queryEdit: payload,
       };
 
     default:

@@ -55,7 +55,7 @@ export function AppHeader() {
             </IconButton>
            }
 
-            <Typography variant='h6'sx={{mr:1, pr:1, fontSize:20, fontFamily:"'Nanum Gothic Coding', monospace;",
+            <Typography variant='h6'sx={{mr:1, pr:1, fontSize:20, fontFamily:"'Poppins', sans-serif;",
 
             fontSize: {
                 lg: 25,
@@ -81,8 +81,13 @@ export function AppHeader() {
             justifyContent:'space-around',}}>
 
                 <Link variant="h4" href='/'noWrap sx={{
-                    fontFamily:"'Nanum Gothic Coding', monospace;",
+                    fontFamily:"'Poppins', sans-serif;",
                     color:'white',
+                    textShadow:
+                    "0 0 8PX #21ebff, 0 0 15px #21ebff",
+                    textDecoration:'none',
+                    p:1,
+                    borderRadius:'5px',
                     mr:5,
                     fontSize: {
                         lg: 30,
@@ -92,7 +97,7 @@ export function AppHeader() {
 
                       },
                     }}>
-                    MyCoolSnippet
+                    CoolSnippets
                 </Link>
                 {authLinks}
             </Toolbar>

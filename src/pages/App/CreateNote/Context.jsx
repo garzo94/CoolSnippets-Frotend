@@ -62,7 +62,6 @@ export function Provider({ children }) {
   };
 
   const TitlePositionFunc = (value) => {
-    console.log(value);
     dispatch({
       type: "TITLE_POSITION",
       payload: value,
@@ -117,6 +116,19 @@ export function Provider({ children }) {
     });
   };
 
+  const Edit = () => {
+    dispatch({
+      type: "EDIT",
+    });
+  };
+
+  const QueryEdit = (values) => {
+    dispatch({
+      type: "QUERY_EDIT",
+      payload: values,
+    });
+  };
+
   const value = {
     addText: state.addText,
     addTitle: state.addTitle,
@@ -131,6 +143,10 @@ export function Provider({ children }) {
     changeQuery,
     changeBoolTwitter,
     QuerySnippet,
+    Edit,
+    QueryEdit,
+    queryEdit: state.queryEdit,
+    edit: state.edit,
     querySnippet: state.querySnippet,
     username: state.username,
     text: state.text,

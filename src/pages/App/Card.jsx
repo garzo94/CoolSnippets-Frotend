@@ -62,6 +62,7 @@ export default function CardNote({
         icon={<DownloadIcon />}
         tooltipTitle="Download"
         color="secondary"
+        onClick={downloadImage}
         // TooltipClasses={'.MuiTooltip-tooltip':{color:'red'}}
         sx={{ color: `${theme.palette.secondary.main}` }}
       />
@@ -81,7 +82,7 @@ export default function CardNote({
         icon={<EditIcon />}
         tooltipTitle="Edit"
         color="secondary"
-        // TooltipClasses={'.MuiTooltip-tooltip':{color:'red'}}
+        onClick={() => navigate(`/create-note/edit/${id}`)}
         sx={{ color: `${theme.palette.secondary.main}` }}
       />
     </SpeedDial>

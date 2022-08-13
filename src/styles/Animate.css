@@ -1,0 +1,50 @@
+.div{
+    animation: animate .1s linear infinite;
+    transform: skewY(-5deg);
+}
+
+
+
+
+.div h1 span {
+    animation: animate .5s linear infinite;
+}
+
+.div h1 span:nth-child(1) {
+    animation-delay: 1s;
+}
+
+.div h1 span:nth-child(2) {
+    animation-delay: 5s;
+}
+
+.div h1 span:nth-child(3) {
+    animation-delay: 2s;
+}
+.div h1 span:nth-child(4) {
+    animation-delay: .5s;
+}
+
+.div h1 span:nth-child(5) {
+    animation-delay: 2s;
+}
+
+@keyframes animate {
+    0%
+    {
+        opacity:1;
+    }
+    30%
+    {
+        opacity:1;
+    } 40%
+    {
+        opacity:0.8;
+    } 50%
+    {
+        opacity:1;
+    } 110%
+    {
+        opacity:1;
+    }
+}

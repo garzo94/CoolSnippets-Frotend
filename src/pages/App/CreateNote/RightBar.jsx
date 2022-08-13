@@ -39,6 +39,7 @@ export default function RightBar() {
     addTopic,
     addSubTopic,
     addSnippet,
+    updateResource,
   } = useRequestResource({});
 
   const {
@@ -55,6 +56,8 @@ export default function RightBar() {
     prolanguage,
     querySnippet,
     QuerySnippet,
+
+    Edit,
   } = useText();
 
   formData.append("text", text);
@@ -71,21 +74,24 @@ export default function RightBar() {
   const [subtopicAdded, setSubTopicAdded] = useState("");
   const [add, setAdd] = useState(null);
   const { id } = useParams();
-  console.log(querySnippet, "myquerysnipetttttt");
+
   function handleChange(event) {
     switch (event.target.name) {
       case "language":
         setTopic(null);
-        setSubTopic(null);
         ProLanguage(event.target.value);
         QuerySnippet(`${event.target.value}`);
 
+        break;
       case "topic":
         setTopic(event.target.value);
         QuerySnippet(`${prolanguage}/${event.target.value}`);
+
+        break;
       case "subtopic":
         QuerySnippet(`${prolanguage}/${topic}/${event.target.value}`);
         setSubTopic(event.target.value);
+        break;
     }
   }
 
@@ -118,13 +124,15 @@ export default function RightBar() {
     if (resource !== null) {
       var lan = resource.language;
       var top = resource.topic;
-      getSubTopics({
-        query: `${prolanguage ? prolanguage : lan.id}/${
-          topic ? topic : top.id
-        }/`,
-      });
+      top
+        ? getSubTopics({
+            query: `${prolanguage ? prolanguage : lan.id}/${
+              topic ? topic : top.id
+            }/`,
+          })
+        : null;
     }
-  }, [resource, topic, prolanguage]);
+  }, [resource, topic]);
 
   function handleTextFieldText(event) {
     if (dynamicText === "language") {
@@ -140,35 +148,39 @@ export default function RightBar() {
   function handleSaveEdit(e) {
     const text = e.target.innerText;
     if (typeof prolanguage === "number") {
+      if (image !== null) {
+        formData.append("image", image, "Mysnippe.png");
+      }
+      if (textPosition !== null) {
+        formData.append("xtext", parseInt(textPosition.valueX));
+        formData.append("ytext", parseInt(textPosition.valueY));
+      }
+      if (titlePosition !== null) {
+        formData.append("xtitle", titlePosition.valueX);
+        formData.append("ytitle", titlePosition.valueY);
+      }
       if (text === "SAVE") {
         Save();
-        if (image !== null) {
-          formData.append("image", image, "Mysnippe.png");
-        }
-        if (textPosition !== null) {
-          formData.append("xtext", textPosition.valueX);
-          formData.append("ytext", textPosition.valueY);
-        }
-        if (titlePosition !== null) {
-          formData.append("xtitle", titlePosition.valueX);
-          formData.append("ytile", titlePosition.valueY);
-        }
-
         addSnippet(formData, querySnippet);
+      }
+      if (text === "EDIT") {
+        Edit();
+        updateResource(id, formData, querySnippet);
       }
     } else {
       enqueueSnackbar("Select a programing language!", { variant: "error" });
     }
   }
+
   function handleAdd() {
     if (dynamicText === "language") {
       addLanguage({ name: languageAdded });
-      setAdd([languageAdded]);
+      setAdd(languageAdded);
       handleOpen();
     }
     if (dynamicText === "topic") {
       addTopic({ name: topicAdded }, { id: prolanguage });
-      setAdd([languageAdded, topicAdded]);
+      setAdd([topicAdded]);
       handleOpen();
     }
     if (dynamicText === "subtopic") {
@@ -177,7 +189,7 @@ export default function RightBar() {
         { idLang: prolanguage },
         { idTop: topic }
       );
-      setAdd([subtopicAdded]);
+      setAdd(subtopicAdded);
       handleOpen();
     }
   }
@@ -332,7 +344,7 @@ export default function RightBar() {
                     );
                   })
                 ) : (
-                  <MenuItem sx={{ fontSize: "12px" }}>
+                  <MenuItem key={"15sf"} sx={{ fontSize: "12px" }}>
                     No languages yet...
                   </MenuItem>
                 )}
@@ -387,27 +399,27 @@ export default function RightBar() {
                 color={theme.secondary}
                 size="small"
               >
-                {nested.results.length !== 0 ? (
-                  nested.results.map((n) => {
-                    return n.id === prolanguage
-                      ? n.topic.map((t) => {
-                          return (
-                            <MenuItem
-                              value={t.id}
-                              key={t.id}
-                              sx={{ fontSize: "12px" }}
-                            >
-                              {t.name}
-                            </MenuItem>
-                          );
-                        })
-                      : null;
-                  })
-                ) : (
-                  <MenuItem sx={{ fontSize: "12px" }}>
-                    No topics yet...
-                  </MenuItem>
-                )}
+                {nested.results.map((n) => {
+                  return n.id === prolanguage ? (
+                    n.topic.length === 0 ? (
+                      <MenuItem sx={{ fontSize: "12px" }}>
+                        No topics yet...
+                      </MenuItem>
+                    ) : (
+                      n.topic.map((t) => {
+                        return (
+                          <MenuItem
+                            value={t.id}
+                            key={t.id}
+                            sx={{ fontSize: "12px" }}
+                          >
+                            {t.name}
+                          </MenuItem>
+                        );
+                      })
+                    )
+                  ) : null;
+                })}
               </SelectCustomized>
             </FormControl>
             <Tooltip title="Add a new Topic">
@@ -494,31 +506,9 @@ export default function RightBar() {
             </Tooltip>
           </Box>
 
-          {/* <TextField
-            id="standard-basic"
-            label="Add a short description"
-            variant="standard"
-            onChange={handleDescription}
-            value={description ?? ""}
-            sx={{
-              width: "90%",
-              mt: 3,
-              color: "white",
-              "& label": { color: "primary.main" },
-              "& input": { borderBottom: "1px solid #21ebff" },
-            }}
-            inputProps={{
-              sx: { color: "rgba(33, 235, 255, 0.8)" },
-              maxLength: 50,
-              fontSize: "8px",
-            }}
-          /> */}
-
           <ButtonCustomized
-            component={Link}
             variant="contained"
             sx={{ mt: 15, borderRadius: "10px" }}
-            to="/create-note"
             onClick={handleSaveEdit}
           >
             {id ? "Edit" : "Save"}

@@ -38,6 +38,7 @@ export default function Main() {
     Title,
     TextPositionFunc,
     TitlePositionFunc,
+
     Code,
     ImageFunc,
     save,
@@ -45,6 +46,7 @@ export default function Main() {
     changeBack,
     prolanguage,
     changeBoolTwitter,
+    edit,
   } = useText();
 
   useEffect(() => {
@@ -58,21 +60,24 @@ export default function Main() {
     valueX: -200,
     valueY: -140,
   });
+
   const [Textposition, setTextposition] = useState({
     valueX: -250,
     valueY: -100,
   });
 
+
+
   const eventLoggerTitle = (e, data) => {
     TitlePositionFunc({
-      valueX: Math.round(data.x),
+      valueX: Math.toFixed(2),
       valueY: Math.round(data.y),
     });
   };
   const eventLoggerText = (e, data) => {
     TextPositionFunc({
-      valueX: Math.round(data.x),
-      valueY: Math.round(data.y),
+      valueX: data.x.toFixed(2),
+      valueY: data.y.toFixed(2),
     });
   };
 
@@ -84,11 +89,20 @@ export default function Main() {
     domtoimage.toPng(document.getElementById("domEl")).then(function (dataUrl) {
       ImageFunc(toBlob(dataUrl));
     });
-  }, [save, prolanguage, changeBack]);
+  }, [save, edit, prolanguage, changeBack]);
 
   useEffect(() => {
     Text(textChange);
+    if (addText === true) {
+      TextPositionFunc(Textposition);
+    }
   }, [addText]);
+
+  useEffect(() => {
+    if (addTitle === true) {
+      TitlePositionFunc(Titleposition);
+    }
+  }, [addTitle]);
 
   useEffect(() => {
     Title(textChange);
@@ -115,16 +129,21 @@ export default function Main() {
       }
       if (resource.text) {
         setTextChange(resource.text);
+        setTextposition({ valueX: resource.xtext, valueY: resource.ytext });
       }
       if (resource.title) {
         setTitleChange(resource.title);
+        setTitleposition({
+          valueX: resource.xtitle,
+          valueY: resource.ytitle,
+        });
       }
       if (resource.twitter) {
         setTwitterChange(resource.twitter);
         changeBoolTwitter();
       }
       if (resource.code) {
-        Code(resource.code);
+        Code(resource.code === null ? "" : resource.code);
       }
     }
   }, [resource]);
@@ -218,8 +237,8 @@ export default function Main() {
           {addText ? (
             <Draggable
               defaultPosition={{
-                x: Textposition.valueX,
-                y: Textposition.valueY,
+                x: parseInt(Textposition.valueX),
+                y: parseInt(Textposition.valueY),
               }}
               bounds="parent"
               onStop={eventLoggerText}
@@ -249,8 +268,8 @@ export default function Main() {
           {addTitle ? (
             <Draggable
               defaultPosition={{
-                x: Titleposition.valueX,
-                y: Titleposition.valueY,
+                x: parseInt(Titleposition.valueX),
+                y: parseInt(Titleposition.valueY),
               }}
               bounds="parent"
               onStop={eventLoggerTitle}

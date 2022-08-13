@@ -35,24 +35,6 @@ const theme = createTheme({
   },
 });
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://www.linkedin.com/in/alexander-garzo/">
-        Alexander Garzo
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
 const validationSchema = yup.object({
   username: yup
     .string("Enter your email or username")
@@ -96,161 +78,229 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{ height: "100vh" }}>
-        <CssBaseline />
-        {/* <Box
-          component={Grid}
-          item
-          md={7}
-          sm={6}
-          sx={{
-            display: { xs: "none", sm: "flex", md: "flex" },
+      <CssBaseline />
+      <Box
+        sx={{
+          display: "flex",
+          height: "100vh",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "linear-gradient(to right,#19334d,#290066)",
+          position: "relative",
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: "primary.light" }}>
+          <LockOutlinedIcon />
+        </Avatar>
+
+        <div
+          className="div"
+          style={{
+            left: "5.6rem",
+            top: "7rem",
+            position: "absolute",
+          }}
+        >
+          <h4
+            style={{
+              margin: "0",
+              padding: "0",
+              color: "white",
+              fontFamily: "poppins",
+            }}
+          >
+            Let's create...
+          </h4>
+          <h1
+            style={{
+              margin: "0",
+              padding: "0",
+              fontSize: "4rem",
+              fontFamily: "poppins",
+              color: "#fff",
+              textShadow:
+                "0 0 10PX #21ebff, 0 0 20px #21ebff, 0 0 80px #21ebff, 0 0 120px",
+            }}
+          >
+            C<span>oo</span>
+            <span>l</span>
+            <span>Snip</span>
+            <span>pet</span>
+            <span>s</span>
+          </h1>
+        </div>
+        <form
+          onSubmit={formik.handleSubmit}
+          style={{
+            background: "rgba(255,255,255,0.06)",
+            boxShadow: "0 8px 32px 0 rgba(31,38,135,.37)",
+            borderRadius: "30px",
+            borderLeft: "1px solid rgba(255,255,255,.3)",
+            borderTop: "1px solid rgba(255,255,255,.3)",
+            display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            background: "linear-gradient( 45deg,#0277bd, #1f004d)",
+            width: "30%",
+            height: "80%",
           }}
         >
           <Typography
-            variant="h2"
+            variant="h4"
             sx={{
-              mb: 2,
-              fontFamily: "Nanum Gothic Coding",
-              fontSize: {
-                lg: 60,
-                md: 40,
-                sm: 30,
-              },
-
-              fontWeight: "700",
               color: "white",
+              fontFamily: "'Poppins', sans-serif;",
+              alignContent: "center",
+              textAlign: "center",
+              m: "15px",
+              fontWeight: "500",
+              opacity: ".7",
+              letterSpacing: "3px",
             }}
           >
-            My Programing Notes
+            SIGN UP
           </Typography>
-
-          <Box
-            component="img"
+          <TextField
             sx={{
-              maxHeight: { xs: 0, sm: 250, md: 300, lg: 350 },
-              maxWidth: { xs: 0, sm: 300, md: 350, lg: 400 },
-              borderRadius: "20px",
-              boxShadow: "-3px -3px 5px #ffff",
-              marginTop: "20px",
+              input: {
+                color: "#19334d",
+                fontWeight: "300",
+                bgcolor: "rgba(255,255,255,0.9)",
+                borderRadius: "10px",
+              },
+              width: "80%",
             }}
-            alt="Side image"
-            src={Image}
+            color="secondary"
+            margin="normal"
+            size="small"
+            required
+            id="username"
+            label="Username"
+            name="username"
+            autoFocus
+            onChange={formik.handleChange}
+            error={formik.touched.username && Boolean(formik.errors.username)}
+            helperText={formik.touched.username && formik.errors.username}
           />
-        </Box> */}
-
-        <Grid item xs={12} sm={6} md={5} component={Paper} elevation={6} square>
-          <Box
+          <TextField
             sx={{
-              my: 8,
-              mx: 4,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
+              input: {
+                color: "#19334d",
+                fontWeight: "300",
+                bgcolor: "rgba(255,255,255,0.9)",
+                borderRadius: "10px",
+              },
+              width: "80%",
+            }}
+            color="secondary"
+            size="small"
+            margin="normal"
+            required
+            id="email"
+            label="Email"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            onChange={formik.handleChange}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
+          />
+          <TextField
+            sx={{
+              input: {
+                color: "#19334d",
+                fontWeight: "300",
+                bgcolor: "rgba(255,255,255,0.9)",
+                borderRadius: "10px",
+              },
+              width: "80%",
+            }}
+            color="secondary"
+            margin="normal"
+            required
+            size="small"
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            onChange={formik.handleChange}
+            autoComplete="current-password"
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+          />
+          <TextField
+            sx={{
+              input: {
+                color: "#19334d",
+                fontWeight: "300",
+                bgcolor: "rgba(255,255,255,0.9)",
+                borderRadius: "10px",
+              },
+              width: "80%",
+            }}
+            margin="normal"
+            required
+            color="secondary"
+            size="small"
+            name="password2"
+            label="Confrim Password"
+            type="password"
+            id="password2"
+            onChange={formik.handleChange}
+            autoComplete="current-password"
+            error={formik.touched.password2 && Boolean(formik.errors.password2)}
+            helperText={formik.touched.password2 && formik.errors.password2}
+          />
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{
+              mt: 3,
+              mb: 2,
+              bgcolor: "rgba(255,255,255,0.7)",
+              width: "50%",
+              opacity: ".7",
+              fontWeith: "500",
+              borderRadius: "20px",
+              borderLeft: "2px solid rgba(33, 235, 255, 0.5)",
+              borderTop: "2px solid rgba(33, 235, 255, 0.5)",
+              color: "#19334d",
+
+              "&:hover": {
+                backgroundColor: "rgba(255,255,255,0.9)",
+              },
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "primary.dark" }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography variant="h5" sx={{ color: "primary.dark" }}>
-              Sign Up
-            </Typography>
-            <form onSubmit={formik.handleSubmit}>
-              <TextField
-                sx={{ input: { color: "#0277bd" } }}
-                color="primary"
-                margin="normal"
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoFocus
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.username && Boolean(formik.errors.username)
-                }
-                helperText={formik.touched.username && formik.errors.username}
-              />
-              <TextField
-                sx={{ input: { color: "#0277bd" } }}
-                color="primary"
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                onChange={formik.handleChange}
-                error={formik.touched.email && Boolean(formik.errors.email)}
-                helperText={formik.touched.email && formik.errors.email}
-              />
-              <TextField
-                sx={{ input: { color: "#0277bd" } }}
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                onChange={formik.handleChange}
-                autoComplete="current-password"
-                error={
-                  formik.touched.password && Boolean(formik.errors.password)
-                }
-                helperText={formik.touched.password && formik.errors.password}
-              />
-              <TextField
-                sx={{ input: { color: "#0277bd" } }}
-                margin="normal"
-                required
-                fullWidth
-                name="password2"
-                label="Confrim Password"
-                type="password"
-                id="password2"
-                onChange={formik.handleChange}
-                autoComplete="current-password"
-                error={
-                  formik.touched.password2 && Boolean(formik.errors.password2)
-                }
-                helperText={formik.touched.password2 && formik.errors.password2}
-              />
+            SIGN UP
+          </Button>
 
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{
-                  mt: 3,
-                  mb: 2,
-                  bgcolor: "primary.light",
-                  "&:hover": {
-                    backgroundColor: "primary",
-                  },
-                }}
-              >
-                Sign Up
-              </Button>
-              <Grid container>
-                <Grid item>
-                  <Link href="/signin" variant="body2">
-                    {"Already have an account? Sign In"}
-                  </Link>
-                </Grid>
-              </Grid>
-              <Copyright sx={{ mt: 5 }} />
-            </form>
-          </Box>
-        </Grid>
-      </Grid>
+          <Link
+            href="/signin"
+            variant="body2"
+            sx={{ color: "white", opacity: "0.8" }}
+          >
+            {"Already have an account? Sign In"}
+          </Link>
+          <Typography
+            variant="body2"
+            sx={{ color: "rgba(255,255,255,0.15)", marginTop: "20px" }}
+            align="center"
+          >
+            {"Copyright © "}
+            <Link
+              color="inherit"
+              href="https://www.linkedin.com/in/alexander-garzo/"
+            >
+              Alexander Garzo
+            </Link>{" "}
+            {new Date().getFullYear()}
+            {"."}
+          </Typography>
+        </form>
+      </Box>
     </ThemeProvider>
   );
 }

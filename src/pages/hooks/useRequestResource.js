@@ -172,9 +172,9 @@ const addSubTopic = useCallback((values,{idLang},{idTop}) => {
       }).catch(handleRequestResourceError)
 }, [ enqueueSnackbar, , handleRequestResourceError, setLoading])
 //#######
-
+//### Create Snippet
 const addSnippet = useCallback((values,querySnippet) => {
-  console.log(querySnippet,'mysnipetttttttttttt')
+
   setLoading(true)
   axios.post(`/api/snippet/${querySnippet}/`,values,getCommonOptions())
       .then(() => {
@@ -184,6 +184,20 @@ const addSnippet = useCallback((values,querySnippet) => {
       }).catch(handleRequestResourceError)
 }, [ enqueueSnackbar, , handleRequestResourceError, setLoading])
 //#######
+//Edit Snippet
+const updateResource = useCallback((id, values,querySnippet, succesCallback) => {
+  setLoading(true)
+  console.log(values,'jeje')
+  axios.put(`/api/snippet-updatedelete/${id}/${querySnippet}/`, values, getCommonOptions())
+      .then((res) => {
+          setLoading(false)
+          enqueueSnackbar(`Snippet updated`)
+          if (succesCallback){
+              succesCallback()
+          }
+
+      }).catch(handleRequestResourceError)
+},[endpoint, enqueueSnackbar, handleRequestResourceError, setLoading])
   return {
     resourceList,
     getResourceList,
@@ -195,6 +209,7 @@ const addSnippet = useCallback((values,querySnippet) => {
     addTopic,
     addSubTopic,
     addSnippet,
+    updateResource,
     resource,
     languages,
     nested,

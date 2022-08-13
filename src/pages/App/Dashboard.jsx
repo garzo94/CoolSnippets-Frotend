@@ -40,7 +40,6 @@ export default function Dashboard() {
   } = useRequestResource({});
   const { id } = useParams();
 
-  console.log(Math.ceil(resourceList.count / pageSize), "my math number");
   useEffect(() => {
     getResourceList({ query: query });
   }, [query]);
@@ -75,7 +74,7 @@ export default function Dashboard() {
           variant="h5"
           sx={{
             color: `${theme.palette.secondary.main}`,
-            fontFamily: "Nanum Gothic Coding",
+            fontFamily: "'Poppins', sans-serif;",
             mt: 2,
             fontSize: { lg: 30, md: 25, sm: 22, xs: 18 },
             fontWeight: { lg: "900", md: "600", sm: "500", xs: "400" },
@@ -92,7 +91,7 @@ export default function Dashboard() {
           }}
         >
           Your Snippets of{" "}
-          {programingLang !== "" ? programingLang + ":" : "..."}
+          {programingLang !== "" ? programingLang + " :" : "..."}
         </Typography>
         <Box
           sx={{
