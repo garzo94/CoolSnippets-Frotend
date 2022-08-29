@@ -38,7 +38,6 @@ export default function Main() {
     Title,
     TextPositionFunc,
     TitlePositionFunc,
-
     Code,
     ImageFunc,
     save,
