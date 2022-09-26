@@ -54,7 +54,8 @@ export default function Main() {
     }
   }, [id]);
 
-  const nodeRef = React.useRef(null);
+  const textRef = React.useRef(null);
+  const titleRef = React.useRef(null);
   const [Titleposition, setTitleposition] = useState({
     valueX: -200,
     valueY: -140,
@@ -65,12 +66,10 @@ export default function Main() {
     valueY: -100,
   });
 
-
-
   const eventLoggerTitle = (e, data) => {
     TitlePositionFunc({
-      valueX: Math.toFixed(2),
-      valueY: Math.round(data.y),
+      valueX: data.x.toFixed(2),
+      valueY: data.y.toFixed(2),
     });
   };
   const eventLoggerText = (e, data) => {
@@ -241,10 +240,10 @@ export default function Main() {
               }}
               bounds="parent"
               onStop={eventLoggerText}
-              nodeRef={nodeRef}
+              nodeRef={textRef}
             >
               <div
-                ref={nodeRef}
+                ref={textRef}
                 suppressContentEditableWarning={true}
                 contentEditable="true"
                 onInput={(e) => handleChangeText(e)}
@@ -272,11 +271,11 @@ export default function Main() {
               }}
               bounds="parent"
               onStop={eventLoggerTitle}
-              nodeRef={nodeRef}
+              nodeRef={titleRef}
             >
-              <h3
+              <div
                 contentEditable="true"
-                ref={nodeRef}
+                ref={titleRef}
                 suppressContentEditableWarning={true}
                 onInput={(e) => handleChangeTitle(e)}
                 onKeyDown={(e) => handleKey(e)}
@@ -289,8 +288,15 @@ export default function Main() {
                   fontSize: "1.5rem",
                 }}
               >
-                {titleChange}
-              </h3>
+                <Typography
+                  sx={{
+                    fontStyle: "italic",
+                    fontSize: "1.5rem",
+                  }}
+                >
+                  {titleChange}
+                </Typography>
+              </div>
             </Draggable>
           ) : null}
 

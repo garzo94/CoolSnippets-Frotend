@@ -56,50 +56,6 @@ export default function SignIn() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {/* <Box
-          component={Grid}
-          item
-          md={7}
-          sm={6}
-          sx={{
-            display: { xs: "none", sm: "flex", md: "flex" },
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            background: "linear-gradient( 45deg,#0277bd, #1f004d)",
-          }}
-        >
-          <Typography
-            variant="h2"
-            sx={{
-              mb: 2,
-              fontFamily: "Nanum Gothic Coding",
-              fontSize: {
-                lg: 60,
-                md: 40,
-                sm: 30,
-              },
-
-              fontWeight: "700",
-              color: "white",
-            }}
-          >
-            My Programing Notes
-          </Typography>
-
-          <Box
-            component="img"
-            sx={{
-              maxHeight: { xs: 0, sm: 250, md: 300, lg: 350 },
-              maxWidth: { xs: 0, sm: 300, md: 350, lg: 400 },
-              borderRadius: "20px",
-              boxShadow: "-3px -3px 5px #ffff",
-              marginTop: "20px",
-            }}
-            alt="Side image"
-            src={Image}
-          />
-        </Box> */}
 
       <Box
         sx={{
@@ -115,10 +71,11 @@ export default function SignIn() {
         <Avatar sx={{ m: 1, bgcolor: "primary.dark" }}>
           <LockOutlinedIcon />
         </Avatar>
-        <div
+        <Box
+          component="div"
           className="div"
-          style={{
-            left: "6rem",
+          sx={{
+            left: { lg: "6rem", md: "3rem", sm: "2rem", xs: "1rem" },
             top: "8.4rem",
             position: "absolute",
           }}
@@ -133,11 +90,13 @@ export default function SignIn() {
           >
             Let's create...
           </h4>
-          <h1
-            style={{
+          <Typography
+            component="h1"
+            className="h1"
+            sx={{
               margin: "0",
               padding: "0",
-              fontSize: "4rem",
+              fontSize: { lg: "4rem", md: "3rem", sm: "2rem", xs: "1rem" },
               fontFamily: "poppins",
               color: "#fff",
               textShadow:
@@ -149,11 +108,12 @@ export default function SignIn() {
             <span>Snip</span>
             <span>pet</span>
             <span>s</span>
-          </h1>
-        </div>
-        <form
+          </Typography>
+        </Box>
+        <Box
           onSubmit={formik.handleSubmit}
-          style={{
+          component="form"
+          sx={{
             background: "rgba(255,255,255,0.06)",
             boxShadow: "0 8px 32px 0 rgba(31,38,135,.37)",
             borderRadius: "30px",
@@ -163,8 +123,8 @@ export default function SignIn() {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            width: "30%",
-            height: "60%",
+            width: { lg: "30%", md: "40%", sm: "55%", xs: "75%" },
+            height: "61%",
           }}
         >
           <Typography
@@ -281,7 +241,7 @@ export default function SignIn() {
             {new Date().getFullYear()}
             {"."}
           </Typography>
-        </form>
+        </Box>
       </Box>
     </ThemeProvider>
   );

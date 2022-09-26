@@ -12,7 +12,7 @@
     "build": "webpack --mode development",
     "build:prod": "webpack --mode production"
   },
-  "proxy": "http://0.0.0.0:8000",
+  "proxy": "http://coolsnippets-app-env.us-east-1.elasticbeanstalk.com",
   "keywords": [
     "react"
   ],
