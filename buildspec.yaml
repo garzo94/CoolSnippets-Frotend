@@ -2,6 +2,8 @@
 version: 0.2
 phases:
   pre_build:
+    runtime-versions:
+      nodejs: 16
     commands:
       #installs dependencies into the node_modules/ directory
       - npm install
@@ -9,7 +11,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Compiling
-      - npm run build
+      - npm run build:prod
   post_build:
     commands:
       - echo Build completed on `date`
