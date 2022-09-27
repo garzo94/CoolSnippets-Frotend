@@ -10,7 +10,8 @@
     "dev": "webpack-dev-server --mode development --hot --open --static",
     "docs:build": "documentation build src/** -f html -o docs",
     "build": "webpack --mode development",
-    "build:prod": "webpack --mode production"
+    "build:prod": "webpack --mode production",
+    "deploy:prod": "netlify deploy --site $NETLIFY_SITE_ID"
   },
   "proxy": "http://coolsnippets-app-env.us-east-1.elasticbeanstalk.com",
   "keywords": [
@@ -38,6 +39,7 @@
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.4.3",
+    "netlify-cli": "^11.8.3",
     "node-sass": "^6.0.1",
     "sass-loader": "^12.3.0",
     "source-map-loader": "^3.0.0",
