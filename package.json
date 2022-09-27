@@ -67,6 +67,6 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
     "yup": "^0.32.11"
-  }
-
+  },
+  "homepage": "/"
 }
