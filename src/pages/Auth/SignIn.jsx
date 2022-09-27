@@ -33,12 +33,11 @@ const validationSchema = yup.object({
 
 export default function SignIn() {
   const navigate = useNavigate();
-  const [valule, setValule] = useState(0);
+
   // eslint-disable-next-line no-unused-vars
   const { login, register, loading } = useRequestAuth();
   const handleSubmit = (values) => {
     login(values, () => {
-      setValule(1);
       navigate("/");
     });
   };
