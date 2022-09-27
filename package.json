@@ -4,9 +4,7 @@
   "description": "Proyecto final curso React JS",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Comando no especificado\" && exit 1",
-    "lint": "eslint ./src",
-    "lint:fix": "eslint --fix ./src",
+
     "dev": "webpack-dev-server --mode development --hot --open --static",
     "docs:build": "documentation build src/** -f html -o docs",
     "build": "webpack --mode development",
@@ -69,5 +67,6 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
     "yup": "^0.32.11"
-  }
+  },
+  "homepage": " https://idyllic-travesseiro-5b9170.netlify.app/"
 }
