@@ -6,15 +6,12 @@ import TextField from "@mui/material/TextField";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import useRequestAuth from "../hooks/useRequestAuth";
-import Image from "../assets/Image.jpg";
 import { theme } from "../../styles/createTheme";
 import "../../styles/Animate.css";
 

@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "Proyecto final curso React JS",
   "main": "index.js",
+  "proxy":"http://localhost:8000",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://coolsnippets-app-env.us-east-1.elasticbeanstalk.com",
   "keywords": [
     "react"
   ],

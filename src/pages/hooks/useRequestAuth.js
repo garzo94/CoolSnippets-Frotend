@@ -5,6 +5,9 @@ import formatHttpApiError from "../helpers/formatHttpApiError";
 import { useSnackbar } from "notistack";
 import { AuthContext } from "../../context/AuthContextProvider";
 import getCommonOptions from "../helpers/getCommonOptions";
+const client = axios.create({
+  baseURL: "https://web-production-9e25.up.railway.app",
+});
 
 export default function useRequestAuth() {
   const [loading, setLoading] = useState(false);
@@ -28,7 +31,7 @@ export default function useRequestAuth() {
     (email) => {
       setLoading(true);
 
-      axios
+      client
         .post("/api/auth/users/reset_password/", "alexgarzo25@gmail.com")
 
         .then(() => {
@@ -45,7 +48,7 @@ export default function useRequestAuth() {
   const resetPassword = useCallback(
     (data, succesCallback) => {
       setLoading(true);
-      axios
+      client
         .post("/api/auth/users/reset_password_confirm/", data)
         .then(() => {
           enqueueSnackbar("Succesfully updated password");
@@ -62,7 +65,7 @@ export default function useRequestAuth() {
   //  Register endpoint
   const register = useCallback(
     ({ username, email, password }, succesCallback) => {
-      axios
+      client
         .post("/api/auth/users/", { username, email, password })
         .then((res) => {
           enqueueSnackbar(
@@ -80,11 +83,8 @@ export default function useRequestAuth() {
   //  Login Endpoint
   const login = useCallback(
     ({ username, password }, successCallback) => {
-      axios
-        .post(
-          "http://coolsnippets-app-env.us-east-1.elasticbeanstalk.com/api/auth/token/login/",
-          { username, password }
-        )
+      client
+        .post("/api/auth/token/login/", { username, password })
         .then((res) => {
           const { auth_token } = res.data;
           localStorage.setItem("authToken", auth_token);
@@ -100,7 +100,7 @@ export default function useRequestAuth() {
 
   const logout = useCallback(() => {
     setLogoutPending(true);
-    axios
+    client
       .post("/api/auth/token/logout/", null, getCommonOptions())
       .then(() => {
         localStorage.removeItem("authToken");
