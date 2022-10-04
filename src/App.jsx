@@ -45,6 +45,7 @@ const App = () => {
                   </Route>
 
                   <Route element={<RequireNotAuth />}>
+                    {/* <Route path="/" element={<Dashboard />} /> */}
                     <Route path="/signin" element={<SignIn />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useSnackbar } from "notistack";
 import formatHttpApiError from "../helpers/formatHttpApiError";
 import getCommonOptions from "../helpers/getCommonOptions";
-import { LoadingOverlayResourceContext } from "../components/loadingOverlayResource";
+// import { LoadingOverlayResourceContext } from "../components/loadingOverlayResource";
 const client = axios.create({
   baseURL: "https://web-production-9e25.up.railway.app",
 });
@@ -16,9 +16,10 @@ export default function useRequestResource({ endpoint, resourceLabel }) {
   const [nested, setNested] = useState({ results: [] });
   const [languages, setLanguage] = useState({ results: [] });
   const [resource, setResource] = useState(null);
+  const [loading, setLoading] = useState(true);
   // Overlay ###########
-  const loadingOverlay = useContext(LoadingOverlayResourceContext);
-  const { setLoading } = loadingOverlay;
+  // const loadingOverlay = useContext(LoadingOverlayResourceContext);
+  // const { setLoading } = loadingOverlay;
 
   // errors #########################
   const { enqueueSnackbar } = useSnackbar();
@@ -28,10 +29,10 @@ export default function useRequestResource({ endpoint, resourceLabel }) {
     (err) => {
       const formattedError = formatHttpApiError(err);
       seterror(formattedError);
-      setLoading(false);
+      // setLoading(false);
       enqueueSnackbar(formattedError, "error");
     },
-    [enqueueSnackbar, seterror, setLoading]
+    [enqueueSnackbar, seterror]
   );
   // ################################
 
