@@ -5,3 +5,5 @@
 
 ### Create Snippet Page
 ![Create Snippet page](https://github.com/garzo94/CoolSnippets-Frotend/blob/main/Screenshot%20(520).png)
+
+[See backend repository](https://github.com/garzo94/coolsnippets-api)
